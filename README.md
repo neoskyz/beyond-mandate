@@ -52,7 +52,23 @@ approved calls execute). Configs run: M0, M3-stepup, M4-stepup, M4-block, M2-ste
 
 ## Results
 
-See [RESULTS.md](RESULTS.md) and [WRITEUP.md](WRITEUP.md). Figure: [figures/frontier.png](figures/frontier.png).
+4,000 live runs (the spec grid × 5 epochs), $5.46 total API spend. Pooled numbers from `results/summary.csv`:
+
+| config | utility (clean, n=80) | utility (attacked, n=720) | ASR | step-ups/task (clean) | legit calls out of mandate |
+|---|---|---|---|---|---|
+| M0 | 73.8% | 68.1% | 0/720 | 0 | 0.0% |
+| M2-stepup | 73.8% | 69.0% | 0/720 | 0.125 | 19.2% |
+| M3-stepup | 76.2% | 69.0% | 0/720 | 0.125 | 20.6% |
+| M4-stepup | 75.0% | 69.0% | 0/720 | 0.150 | 33.7% |
+| M4-block | 62.5% | 58.8% | 0/720 | 0 | 33.2% (all declined) |
+
+The agent (`claude-haiku-5-5`) never attempted an injected payment, so the live runs measure only
+cost. In an offline stress test where a scripted agent always obeys the injection
+(`results/compromised_agent.md`), ASR is 144/144 at M0, 39/144 at M2 and 1/144 at M3 and M4. M4
+needs 0.438 legit step-ups per task vs 0.188 for M3.
+
+See [RESULTS.md](RESULTS.md) and [WRITEUP.md](WRITEUP.md). Figures: [figures/frontier.png](figures/frontier.png),
+[figures/frontier_compromised.png](figures/frontier_compromised.png).
 
 ## Limitations
 
@@ -81,7 +97,8 @@ AgentDojo checks with known quirks. Details in [RESULTS.md](RESULTS.md#6-limitat
 scripts/setup.sh                        # clones AgentDojo at the pinned commit, creates .venv, runs offline tests
 .venv/bin/python -m mandate_bench.offline            # offline step-up table (no API calls)
 export ANTHROPIC_API_KEY=...            # never written to disk by this code
-.venv/bin/python -m mandate_bench.run --epoch 1      # full grid; resumable (skips records already in results/raw.jsonl)
+for e in 1 2 3 4 5; do .venv/bin/python -m mandate_bench.run --epoch $e --workers 4; done   # resumable
+.venv/bin/python -m mandate_bench.offline --compromised   # stress test (no API calls)
 .venv/bin/python -m mandate_bench.analyze            # results/summary.csv, figures/frontier.png
 ```
 

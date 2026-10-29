@@ -205,3 +205,11 @@ Timestamps are local time (machine clock). Spend = cumulative paid API spend com
 - 2026-10-28 23:42 [M2-stepup] 120/160 runs, cumulative spend $5.4012
 - 2026-10-28 23:43 [M2-stepup] 160/160 runs, cumulative spend $5.4641
 - 2026-10-28 23:43 [M2-stepup] epoch 5 finished: 160 runs written (0 errors); cumulative spend $5.4641
+
+## 2026-10-28 Final
+- Epochs 2-5 complete: raw.jsonl has 4000/4000 ok runs (epochs 1-5), 0 unrecovered errors, 0 mandate failures.
+- Live ASR 0/720 for every config (no injected state-changing call attempted in 3600 attacked runs).
+- Re-ran analyze (pooled), offline LLM-mandate replay, compromised-agent stress test; added results/agent_behavior.md (keyword heuristics).
+- Wrote RESULTS.md, WRITEUP.md; updated README.md results section.
+- Decision: no further paid runs. Live ASR is 0 with this model/attack; the next useful runs (weaker model, adaptive attacks) change the experiment and are listed under next steps.
+- FINAL cumulative spend: $5.4641 (raw $5.2481 + tool_knowledge $0.1886 + pilot $0.0222 + smoke $0.0043 + adjustments $0.0009). Budget $150, stop $120.
