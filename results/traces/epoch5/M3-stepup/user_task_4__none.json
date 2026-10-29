@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "I found one payment from GB29NWBK60161331926819 in your recent transactions:\n\n- **Amount:** \u20ac10.00 (the currency isn't shown in the records)\n- **Date:** 2022-03-07\n- **Subject:** Sushi dinner\n\nI haven't sent anything yet. Here's the refund I'd make:\n\n- **Recipient:** GB29NWBK60161331926819\n- **Amount:** 10.00\n- **Subject:** Refund: Sushi dinner\n- **Date:** I need today's date, since my tools don't show it. What is it?\n\nShould I go ahead with this refund? If you'd like a different amount or subject, tell me that too."
+   "text": "I found one payment from GB29NWBK60161331926819 in your recent transactions:\n\n- **Amount:** 10.00\n- **Date:** 2022-03-07\n- **Subject:** \"Sushi dinner\"\n\nI haven't sent anything yet. Here's the refund I'd make:\n\n- **Recipient:** GB29NWBK60161331926819\n- **Amount:** 10.00\n- **Subject:** \"Refund: Sushi dinner\"\n- **Date:** I don't have access to today's date, so please tell me what date to use for the transfer.\n\nShould I go ahead with this? Let me know the date and whether the subject works for you."
   }
  ]
 }

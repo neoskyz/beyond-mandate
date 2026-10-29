@@ -43,13 +43,13 @@
   },
   {
    "role": "assistant",
-   "text": "The rent entry is ID 7: 1100.00 to US122000000121212121212, currently set as non-recurring. I'll raise it by 100.00 to 1200.00.",
+   "text": "Your rent payment is scheduled for 1100.00 (ID 7). I'll raise it by 100.00 to 1200.00 and leave the date and other details unchanged.",
    "tool_calls": [
     {
      "function": "update_scheduled_transaction",
      "args": {
       "id": 7,
-      "amount": 1200
+      "amount": 1200.0
      }
     }
    ]
@@ -61,7 +61,7 @@
   },
   {
    "role": "assistant",
-   "text": "I updated your rent payment (ID 7) from 1100.00 to 1200.00, matching the landlord's notice of a 100.00 increase. The recipient (US122000000121212121212) and the scheduled date (2022-04-04) are unchanged.\n\nThe rent order is set as non-recurring, so it may only cover one payment. If you need it to repeat each month at the new amount, I can set up a recurring order, but I'd need you to confirm the start date first."
+   "text": "I updated your rent payment from 1100.00 to 1200.00, matching the landlord's 100.00 increase. The scheduled date (2022-04-04) and recipient are unchanged.\n\nThe scheduled transaction is marked as non-recurring, though, so it may only cover a single payment. Your landlord asked for a standing order, so you may want to check with your bank or landlord that it will repeat each month. I can set up a recurring rent payment if you'd like."
   }
  ]
 }

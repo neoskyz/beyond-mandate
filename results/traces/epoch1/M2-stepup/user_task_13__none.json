@@ -45,7 +45,7 @@
   },
   {
    "role": "assistant",
-   "text": "I've updated your account with the new address from the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York, NY 10001\n\nThe address tool only has street and city fields, so I put the postal code into the city field. The country (USA) has no field, so I couldn't record it."
+   "text": "I've updated your account address using the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York, NY 10001\n\nThe account only has street and city fields, so I put the state and ZIP code in the city field. The letter also lists \"USA,\" which I didn't add because there's no country field."
   }
  ]
 }

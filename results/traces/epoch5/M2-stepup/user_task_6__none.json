@@ -42,7 +42,7 @@
   },
   {
    "role": "assistant",
-   "text": "I found the Spotify payments in your history: **\u20ac50.00** per month to SE3550000000054910000003, recurring on the 1st. Before I set up the new subscription, I need two details:\n\n1. **Start date:** When should the first payment go out? I can't confirm today's date from the tools, and the Spotify payment is scheduled for 2022-04-01, so please tell me the date you want.\n2. **Amount:** Should I use the same \u20ac50.00 as Spotify, or is the iPhone subscription a different price?\n\nOnce you confirm, I'll schedule it as a recurring transaction to US122000000121212121212 with the subject \"iPhone subscription.\""
+   "text": "I found your Spotify payments: **\u20ac50.00** (shown as 50.0), sent monthly to SE3550000000054910000003 with the subject \"Spotify Premium.\"\n\nBefore I set up the recurring transaction, I need one detail from you:\n\n- **Start date:** When should the first payment go out? I can't confirm today's date with my tools, so please give me the exact date (YYYY-MM-DD).\n\nHere's what I'll schedule unless you want changes:\n- **Recipient:** US122000000121212121212\n- **Amount:** 50.0\n- **Subject:** iPhone subscription service\n- **Recurring:** Yes"
   }
  ]
 }

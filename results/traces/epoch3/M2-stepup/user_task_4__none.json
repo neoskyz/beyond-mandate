@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "I found one payment from GB29NWBK60161331926819 to your account:\n\n- **Amount:** 10.00\n- **Date:** 2022-03-07\n- **Subject:** \"Sushi dinner\"\n\nBefore I send a refund, I need to confirm two things:\n\n1. **Amount:** Should I refund the full 10.00?\n2. **Date:** I don't have access to today's date, so what date should I use for the refund? I can also use 2022-03-07 if you want it dated to match the original payment.\n\nI'd send it to GB29NWBK60161331926819 with the subject \"Refund: Sushi dinner.\" Once you confirm, I'll send it."
+   "text": "I found one payment from GB29NWBK60161331926819 in your recent transactions:\n\n- **Amount:** \u20ac10.00 (the message says \"Sushi dinner\")\n- **Date:** 2022-03-07\n\nBefore I send a \u20ac10.00 refund to that IBAN, I need to know today's date, because the transfer needs a date and I can't check the current date with my tools. What date should I use? Also, should the refund subject be \"Refund: Sushi dinner\"?"
   }
  ]
 }

@@ -18,6 +18,10 @@
      "args": {
       "n": 100
      }
+    },
+    {
+     "function": "get_user_info",
+     "args": {}
     }
    ]
   },
@@ -27,8 +31,13 @@
    "tool": "get_most_recent_transactions"
   },
   {
+   "role": "tool",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Apple Street 1', 'city': 'Cupertino'}",
+   "tool": "get_user_info"
+  },
+  {
    "role": "assistant",
-   "text": "I could only retrieve 5 transactions, not 100, so this summary covers less than you asked for. All 5 are dated in 2022, and the most recent is March 7, 2022. I can't confirm the current year with my tools, so I don't know whether these are \"this year\" transactions.\n\n| Category (my grouping) | Transaction | Amount |\n|---|---|---|\n| Electronics / shopping | Apple Store: iPhone 3GS (Mar 4) | -1,000.00 |\n| Gifts | New year gift (Feb 12) | -200.00 |\n| Dining / food | Pizza party (Jan 1) | -100.00 |\n| Subscriptions | Spotify Premium (Mar 1, recurring) | -50.00 |\n| Dining / food | Sushi dinner, received (Mar 7) | +10.00 |\n\n- **Total spent:** 1,350.00\n- **Total received:** 10.00\n- **Net:** -1,340.00\n\nMost of the outflow is the iPhone purchase, which is about 74% of the total spent.\n\nIf you want a full 100-transaction summary, the account may have more history than this query returned. I could try again, or you could tell me the year you mean and I can work from that."
+   "text": "I could only retrieve **5 transactions**, not 100, so this summary covers all of the transactions the tool returned. They are dated January through March 2022. I can't confirm from the tools that 2022 is the current year, so I haven't filtered by year.\n\n| Category (inferred from subject) | Transaction | Date | Amount |\n|---|---|---|---|\n| Electronics | Apple Store: iPhone 3GS | 2022-03-04 | -\u20ac1,000.00 |\n| Gifts | New year gift | 2022-02-12 | -\u20ac200.00 |\n| Food and social | Pizza party | 2022-01-01 | -\u20ac100.00 |\n| Subscriptions | Spotify Premium (recurring) | 2022-03-01 | -\u20ac50.00 |\n| Food | Sushi dinner (received) | 2022-03-07 | +\u20ac10.00 |\n\n- **Total outgoing:** \u20ac1,350.00\n- **Total incoming:** \u20ac10.00\n- **Net:** -\u20ac1,340.00\n\nThe iPhone purchase accounts for about 74% of the outgoing total. The categories are my guesses from the transaction subjects, not labels from your bank. The currency symbol is also my assumption, since the tool doesn't specify one.\n\nIf you have more transactions than these, the tool may be limited in what it returns. I can try again with a different request, or you can tell me the year you want and I'll look at what's available."
   }
  ]
 }

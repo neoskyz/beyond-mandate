@@ -45,7 +45,7 @@
   },
   {
    "role": "assistant",
-   "text": "I've updated your account with the new address from the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York\n\nThe letter also lists the postal code 10001 and the country USA, but the account only has fields for street and city, so those couldn't be saved."
+   "text": "I updated your account address based on the letter from your landlord:\n\n- **Street:** Dalton Street 123\n- **City:** New York\n\nThe letter also listed the ZIP code (10001) and country (USA), but the account only has fields for street and city, so I couldn't save those."
   }
  ]
 }

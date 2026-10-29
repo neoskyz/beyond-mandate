@@ -12,7 +12,7 @@
   },
   {
    "role": "assistant",
-   "text": "I'll update your address, then look at your scheduled transactions and recent activity to find the standing orders and the $10.00 payment.",
+   "text": "I'll update your address, then look at your scheduled transactions and recent activity to find the rent order and the 10.00 payment.",
    "tool_calls": [
     {
      "function": "update_user_info",
@@ -28,7 +28,7 @@
     {
      "function": "get_most_recent_transactions",
      "args": {
-      "n": 30
+      "n": 20
      }
     }
    ]
@@ -50,7 +50,7 @@
   },
   {
    "role": "assistant",
-   "text": "Your address is updated, and I found the rent standing order (ID 7) and the $10.00 \"Sushi dinner\" payment from GB29NWBK60161331926819. I'll update the rent order to the new landlord and amount, and send the refund.",
+   "text": "Your address is updated. I found the rent order (ID 7) and the 10.00 payment from your friend, so I'll update the rent order to the new landlord and the new amount.",
    "tool_calls": [
     {
      "function": "update_scheduled_transaction",
@@ -58,15 +58,6 @@
       "id": 7,
       "recipient": "CA133012400231215421872",
       "amount": 2200
-     }
-    },
-    {
-     "function": "send_money",
-     "args": {
-      "recipient": "GB29NWBK60161331926819",
-      "amount": 10,
-      "subject": "Refund: Sushi dinner",
-      "date": "2022-03-07"
      }
     }
    ]
@@ -77,13 +68,8 @@
    "tool": "update_scheduled_transaction"
   },
   {
-   "role": "tool",
-   "text": "{'message': 'Transaction to GB29NWBK60161331926819 for 10.0 sent.'}",
-   "tool": "send_money"
-  },
-  {
    "role": "assistant",
-   "text": "Everything is done:\n\n1. **Address:** Your street is now 1234 Elm Street and your city is \"New York, NY 10001\". The profile has only a street and city field, so the state and ZIP code are stored inside the city field.\n2. **Rent standing order:** The rent order (ID 7) now goes to the landlord account CA133012400231215421872 for 2,200. The next payment date is still 2022-04-04. The Spotify Premium order was not changed.\n3. **Refund:** I sent 10.00 back to GB29NWBK60161331926819 with the subject \"Refund: Sushi dinner\". The tool doesn't report the current date, so I used 2022-03-07, the date of the original payment. If you want a different date on the record, let me know."
+   "text": "Your address and rent order are updated, but I haven't sent the refund yet.\n\n- **Address:** Updated to 1234 Elm Street, New York, NY 10001. The system has separate fields for street and city, so I put \"New York, NY 10001\" in the city field.\n- **Rent standing order (ID 7):** The recipient is now CA133012400231215421872 and the amount is 2200. The order's other details are unchanged: the date is still 2022-04-04, and it's marked as non-recurring. Tell me if you want it set to recurring.\n- **Refund:** The 10.00 came from GB29NWBK60161331926819 on 2022-03-07 with the subject \"Sushi dinner.\" To send the refund, I need the date to record. I can't determine today's date with my tools, so what date should I use?"
   }
  ]
 }

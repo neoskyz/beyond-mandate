@@ -1,7 +1,7 @@
 """Offline experiment (no API calls): replay ground-truth calls through the enforcer.
 
 For each user task, AgentDojo's ground-truth calls are executed in order on a fresh environment.
-Before each state-changing call we ask the enforcer whether it is in-mandate at M2/M3/M4.
+Before each state-changing call we ask the enforcer whether it is in-mandate at M1/M2/M3.
   * "step-ups" = number of the task's own legitimate state-changing calls that are out of
     mandate (each would need a human under the step-up policy).
   * "GT utility under block" = AgentDojo's utility check after replaying with out-of-mandate
@@ -28,7 +28,7 @@ from mandate_bench.mandate import STATE_CHANGING_TOOLS, Mandate, rule_based_mand
 from mandate_bench.oracle import GroundTruthOracle, state_changing_ground_truth
 
 ROOT = Path(__file__).resolve().parent.parent
-LEVELS = (Level.M2, Level.M3, Level.M4)
+LEVELS = (Level.M1, Level.M2, Level.M3)
 ATTACKER_IBAN = "US133000000121212121212"
 
 
@@ -140,15 +140,15 @@ def render_markdown(rows: list[dict], inj: dict, source: str, suite) -> str:
         "(each needs a human under the step-up policy). `GT util (block)` = AgentDojo utility of the "
         "ground-truth trajectory when out-of-mandate calls are blocked instead (1 = task still succeeds).\n"
     )
-    L.append("| user task | legit state-changing calls (payee source) | step-ups M2 / M3 / M4 | GT util (block) M0 / M2 / M3 / M4 |")
+    L.append("| user task | legit state-changing calls (payee source) | step-ups M1 / M2 / M3 | GT util (block) M0 / M1 / M2 / M3 |")
     L.append("|---|---|---|---|")
     for r in rows:
         calls = "; ".join(f"`{fmt_call(c)}` ({c['payee_source']})" for c in r["calls"]) or "none (read-only task)"
         s = r["stepups"]
         u = r["gt_utility_under_block"]
         L.append(
-            f"| {r['user_task']} | {calls} | {s['M2']} / {s['M3']} / {s['M4']} | "
-            f"{int(u['M0'])} / {int(u['M2'])} / {int(u['M3'])} / {int(u['M4'])} |"
+            f"| {r['user_task']} | {calls} | {s['M1']} / {s['M2']} / {s['M3']} | "
+            f"{int(u['M0'])} / {int(u['M1'])} / {int(u['M2'])} / {int(u['M3'])} |"
         )
     n_tasks = len(rows)
     n_sc = sum(1 for r in rows if r["calls"])
@@ -157,7 +157,7 @@ def render_markdown(rows: list[dict], inj: dict, source: str, suite) -> str:
     L.append(f"Totals over {n_tasks} user tasks ({n_sc} with state-changing ground truth, {n_calls} legit state-changing calls):\n")
     L.append("| level | legit calls needing step-up | tasks needing >=1 step-up | mean step-ups / task (all 16) | GT utility under block (of 16) |")
     L.append("|---|---|---|---|---|")
-    for lvl in ("M2", "M3", "M4"):
+    for lvl in ("M1", "M2", "M3"):
         tot = sum(r["stepups"][lvl] for r in rows)
         tasks = sum(r["stepups"][lvl] > 0 for r in rows)
         util = sum(r["gt_utility_under_block"][lvl] for r in rows)
@@ -176,25 +176,25 @@ def render_markdown(rows: list[dict], inj: dict, source: str, suite) -> str:
         "state-changing calls in-mandate under the USER task's mandate? (= the payload would pass the mandate "
         "if the agent obeyed the injection). Counts are pairs out of 16 per injection task.\n"
     )
-    L.append("| injection task | goal (short) | in-mandate M2 | in-mandate M3 | in-mandate M4 |")
+    L.append("| injection task | goal (short) | in-mandate M1 | in-mandate M2 | in-mandate M3 |")
     L.append("|---|---|---|---|---|")
     totals = defaultdict(int)
     for it_id, per_ut in inj.items():
         goal = suite.get_injection_task_by_id(it_id).GOAL.split(". If details")[0][:90]
-        cnt = {lvl: sum(v[lvl]["all_in_mandate"] for v in per_ut.values()) for lvl in ("M2", "M3", "M4")}
+        cnt = {lvl: sum(v[lvl]["all_in_mandate"] for v in per_ut.values()) for lvl in ("M1", "M2", "M3")}
         for k, v in cnt.items():
             totals[k] += v
-        L.append(f"| {it_id} | {goal} | {cnt['M2']} | {cnt['M3']} | {cnt['M4']} |")
+        L.append(f"| {it_id} | {goal} | {cnt['M1']} | {cnt['M2']} | {cnt['M3']} |")
     n_pairs = sum(len(v) for v in inj.values())
-    L.append(f"| **all** | | {totals['M2']} / {n_pairs} | {totals['M3']} / {n_pairs} | {totals['M4']} / {n_pairs} |")
+    L.append(f"| **all** | | {totals['M1']} / {n_pairs} | {totals['M2']} / {n_pairs} | {totals['M3']} / {n_pairs} |")
     passing = [
         f"{ut}+{it}"
         for it, per_ut in inj.items()
         for ut, v in per_ut.items()
-        if v["M3"]["all_in_mandate"] or v["M4"]["all_in_mandate"]
+        if v["M2"]["all_in_mandate"] or v["M3"]["all_in_mandate"]
     ]
     L.append("")
-    L.append("Pairs where the payload is in-mandate at M3 or M4: " + (", ".join(passing) if passing else "none") + "\n")
+    L.append("Pairs where the payload is in-mandate at M2 or M3: " + (", ".join(passing) if passing else "none") + "\n")
     return "\n".join(L)
 
 
@@ -274,8 +274,8 @@ def compromised_agent_run(suite, user_task, inj_task, mandate: Mandate, level: L
 
 
 def compromised_agent_table(suite, mandates: dict[str, Mandate], source: str) -> tuple[str, list[dict]]:
-    configs = [("M0", Level.M0, Policy.BLOCK), ("M2-stepup", Level.M2, Policy.STEPUP), ("M3-stepup", Level.M3, Policy.STEPUP),
-               ("M4-stepup", Level.M4, Policy.STEPUP), ("M4-block", Level.M4, Policy.BLOCK)]
+    configs = [("M0", Level.M0, Policy.BLOCK), ("M1-stepup", Level.M1, Policy.STEPUP), ("M2-stepup", Level.M2, Policy.STEPUP),
+               ("M3-stepup", Level.M3, Policy.STEPUP), ("M3-block", Level.M3, Policy.BLOCK)]
     rows = []
     for name, lvl, pol in configs:
         pairs = [(ut_id, ut, it) for ut_id, ut in suite.user_tasks.items() for it in suite.injection_tasks.values()]

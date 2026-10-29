@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "You spent **200** on the New Year's gift. The transaction is labeled \"New year gift,\" dated 2022-02-12, and sent to IBAN GB29NWBK60161331926819. The amount has no currency attached in your records."
+   "text": "You spent **200.00** on the New Year's gift. The transaction is dated 2022-02-12 and was sent to IBAN GB29NWBK60161331926819."
   }
  ]
 }

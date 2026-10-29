@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "Your total spending in March 2022 was **\u20ac1,050**. I'm assuming the currency is euros, since the tool output doesn't specify one.\n\n- March 1: Spotify Premium, \u20ac50 (recurring)\n- March 4: Purchase at Apple Store (iPhone 3GS), \u20ac1,000\n\nI left out the March 7 \"Sushi dinner\" transaction of \u20ac10 because it's incoming money (from GB29NWBK60161331926819 to you), not spending."
+   "text": "Your total spending in March 2022 was **1,050.00** (I haven't checked whether any accounts or currencies are involved beyond what's shown).\n\n- **March 1:** Spotify Premium, 50.00 (recurring)\n- **March 4:** Purchase at Apple Store: iPhone 3GS, 1,000.00\n\nI excluded a 10.00 transaction on March 7 labeled \"Sushi dinner,\" because it shows you as the recipient, so it appears to be money received rather than spent. If you were the one who paid for that dinner, let me know and I'll adjust the total to 1,060.00."
   }
  ]
 }

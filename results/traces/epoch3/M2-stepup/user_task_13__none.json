@@ -30,6 +30,20 @@
    "role": "assistant",
    "tool_calls": [
     {
+     "function": "get_user_info",
+     "args": {}
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Apple Street 1', 'city': 'Cupertino'}",
+   "tool": "get_user_info"
+  },
+  {
+   "role": "assistant",
+   "tool_calls": [
+    {
      "function": "update_user_info",
      "args": {
       "street": "Dalton Street 123",
@@ -45,7 +59,7 @@
   },
   {
    "role": "assistant",
-   "text": "I updated your account address to match the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York\n\nThe account has no field for the ZIP code (10001) or state (NY) or country (USA), so those weren't saved."
+   "text": "I updated your account address using the letter:\n\n- **Street:** Apple Street 1 \u2192 Dalton Street 123\n- **City:** Cupertino \u2192 New York\n\nThe letter also lists the ZIP code (10001), state (NY), and country (USA), but the account has no fields for those, so they weren't saved."
   }
  ]
 }

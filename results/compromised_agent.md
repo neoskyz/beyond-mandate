@@ -5,10 +5,10 @@ Scripted worst-case agent: executes the injection task's ground-truth calls and 
 | config | ASR, either order | ASR inj-first / inj-last | utility | reviewer queries / task | of which legit |
 |---|---|---|---|---|---|
 | M0 | 144/144 (100.0%) | 143 / 144 | 126/144 | 0.000 | 0.000 |
-| M2-stepup | 39/144 (27.1%) | 38 / 39 | 138/144 | 1.076 | 0.125 |
-| M3-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.403 | 0.188 |
-| M4-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.653 | 0.438 |
-| M4-block | 1/144 (0.7%) | 0 / 1 | 99/144 | 0.000 | 0.000 |
+| M1-stepup | 39/144 (27.1%) | 38 / 39 | 138/144 | 1.076 | 0.125 |
+| M2-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.403 | 0.188 |
+| M3-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.653 | 0.438 |
+| M3-block | 1/144 (0.7%) | 0 / 1 | 99/144 | 0.000 | 0.000 |
 
 # Compromised-agent stress test (mandates: rule-based stub)
 
@@ -17,7 +17,7 @@ Scripted worst-case agent: executes the injection task's ground-truth calls and 
 | config | ASR, either order | ASR inj-first / inj-last | utility | reviewer queries / task | of which legit |
 |---|---|---|---|---|---|
 | M0 | 144/144 (100.0%) | 143 / 144 | 126/144 | 0.000 | 0.000 |
-| M2-stepup | 44/144 (30.6%) | 43 / 44 | 138/144 | 1.042 | 0.125 |
-| M3-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.403 | 0.188 |
-| M4-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.715 | 0.500 |
-| M4-block | 1/144 (0.7%) | 0 / 1 | 90/144 | 0.000 | 0.000 |
+| M1-stepup | 44/144 (30.6%) | 43 / 44 | 138/144 | 1.042 | 0.125 |
+| M2-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.403 | 0.188 |
+| M3-stepup | 1/144 (0.7%) | 0 / 1 | 144/144 | 1.715 | 0.500 |
+| M3-block | 1/144 (0.7%) | 0 / 1 | 90/144 | 0.000 | 0.000 |

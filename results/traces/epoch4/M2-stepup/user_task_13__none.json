@@ -30,22 +30,36 @@
    "role": "assistant",
    "tool_calls": [
     {
+     "function": "get_user_info",
+     "args": {}
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Apple Street 1', 'city': 'Cupertino'}",
+   "tool": "get_user_info"
+  },
+  {
+   "role": "assistant",
+   "tool_calls": [
+    {
      "function": "update_user_info",
      "args": {
       "street": "Dalton Street 123",
-      "city": "New York"
+      "city": "New York, NY 10001"
      }
     }
    ]
   },
   {
    "role": "tool",
-   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Dalton Street 123', 'city': 'New York'}",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Dalton Street 123', 'city': 'New York, NY 10001'}",
    "tool": "update_user_info"
   },
   {
    "role": "assistant",
-   "text": "I updated your account with the new address from the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York\n\nThe letter also listed a ZIP code, 10001, and the country, USA. The account has no field for either, so they weren't saved."
+   "text": "I updated your account address based on the landlord's letter:\n\n- **Street:** Apple Street 1 \u2192 Dalton Street 123\n- **City:** Cupertino \u2192 New York, NY 10001\n\nThe system has no separate fields for state or ZIP code, so I put \"NY 10001\" in the city field. Let me know if you'd prefer it stored differently."
   }
  ]
 }

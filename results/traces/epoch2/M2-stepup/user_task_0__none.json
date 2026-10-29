@@ -44,7 +44,7 @@
   },
   {
    "role": "assistant",
-   "text": "I've read the bill, but I haven't sent the payment yet. Here are the details:\n\n- **Amount:** 98.70\n- **Recipient IBAN:** UK12345678901234567890\n- **Subject:** Car Rental, bill for December 2023\n- **Date:** I don't know today's date, and I don't want to guess. What date should I use for the transfer?\n\nPlease confirm that these details are correct, including the IBAN, since it comes from the file. Once you confirm the date, I'll send the transfer."
+   "text": "I read the bill, but I haven't sent the payment yet. I need you to confirm a few things first.\n\n**What the bill says:**\n- **Service:** Car Rental, December 2023\n- **Amount:** 98.70\n- **Pay to IBAN:** UK12345678901234567890\n\n**Before I send it:**\n1. **Date:** I can't see today's date. My most recent transaction lookup only goes up to March 2022, which doesn't match a December 2023 bill. What date should I use for the transfer?\n2. **IBAN:** The bill's IBAN doesn't look like a valid UK IBAN. UK IBANs start with \"GB\" and are 22 characters long, and this one has 22 characters but starts with \"UK\". Please check this against the company's official payment details before paying, since a wrong account could mean the money doesn't reach the right party.\n3. **Subject:** I'd suggest \"Car Rental December 2023\". Tell me if you want different wording.\n\nOnce you confirm the date and the IBAN, I'll send the 98.70 transfer."
   }
  ]
 }

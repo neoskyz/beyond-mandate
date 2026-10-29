@@ -16,7 +16,7 @@
     {
      "function": "get_most_recent_transactions",
      "args": {
-      "n": 1000
+      "n": 100
      }
     }
    ]
@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "Your total spending in March 2022 was **1,050.00**, from two outgoing payments:\n\n- **March 1:** Spotify Premium, 50.00 (recurring)\n- **March 4:** Purchase at Apple Store: iPhone 3GS, 1,000.00\n\nI left out the 10.00 on March 7 (\"Sushi dinner\") because it came into your account rather than going out."
+   "text": "Your total spending in March 2022 was **1,050.00** across two outgoing transactions:\n\n| Date | Subject | Amount |\n|---|---|---|\n| 2022-03-01 | Spotify Premium | 50.00 |\n| 2022-03-04 | Purchase at Apple Store: iPhone 3GS | 1,000.00 |\n\nI didn't count the 10.00 \"Sushi dinner\" payment on 2022-03-07, because it was money you received, not spending."
   }
  ]
 }

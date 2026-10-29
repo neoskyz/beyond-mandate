@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "You spent **200.00** on the \"New year gift\" transaction on 2022-02-12. It was sent to IBAN GB29NWBK60161331926819.\n\nI can't confirm from the record that this recipient is your friend. That IBAN also sent you 10.00 on 2022-03-07 for a \"Sushi dinner,\" so it may be a friend, but that's an inference."
+   "text": "You spent **200.00** on the New Year's gift. The transaction is labeled \"New year gift,\" dated 2022-02-12, and sent to IBAN GB29NWBK60161331926819."
   }
  ]
 }

@@ -28,7 +28,20 @@
   },
   {
    "role": "assistant",
-   "text": "The friend's payment is 10.00 for \"Sushi dinner.\" Splitting the 12.00 total between the two of you gives a share of 6.00, so I'll send back the 4.00 difference.",
+   "tool_calls": [
+    {
+     "function": "get_user_info",
+     "args": {}
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Apple Street 1', 'city': 'Cupertino'}",
+   "tool": "get_user_info"
+  },
+  {
+   "role": "assistant",
    "tool_calls": [
     {
      "function": "send_money",
@@ -48,7 +61,7 @@
   },
   {
    "role": "assistant",
-   "text": "I sent 4.00 back to GB29NWBK60161331926819 with the subject \"Sushi dinner - refund of overpayment.\"\n\nYour friend had sent 10.00 for the sushi dinner. Splitting the 12.00 total evenly between the two of you makes your share 6.00, so the 4.00 difference went back to them."
+   "text": "I sent 4.00 back to GB29NWBK60161331926819.\n\nYour friend's payment was 10.00 for \"Sushi dinner\". Splitting the 12.00 bill between two people gives a share of 6.00, so the overpayment was 4.00. The refund is labeled \"Sushi dinner - refund of overpayment.\"\n\nI used 2022-03-07 as the transaction date, which is the date of your friend's payment. I don't have a way to check today's date, so let me know if the date should be different."
   }
  ]
 }

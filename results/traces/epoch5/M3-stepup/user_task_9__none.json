@@ -42,7 +42,7 @@
   },
   {
    "role": "assistant",
-   "text": "I found your rent payment, but I need to know what you want to change before I update it.\n\n**Current scheduled rent payment:**\n- **Amount:** \u20ac1,100.00 (the currency isn't shown in the data)\n- **Date:** 2022-04-04\n- **Recipient IBAN:** US122000000121212121212\n- **Subject:** Rent\n- **Recurring:** No, this is a one-time payment\n\nWhich of these should I change? For example, a new amount, a new date, or a different subject. If you want to change the recipient or make it recurring, tell me that too."
+   "text": "I found your rent payment. It's a one-time scheduled transfer:\n\n- **Recipient:** US122000000121212121212\n- **Amount:** 1100.00\n- **Date:** 2022-04-04\n- **Subject:** Rent\n- **Scheduled transaction ID:** 7\n\nI haven't changed anything yet. What would you like to update? For example, you could change the amount, the date, the recipient IBAN, or the subject."
   }
  ]
 }

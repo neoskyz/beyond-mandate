@@ -1,0 +1,159 @@
+# Progress log: gpt-4o-mini-2024-07-18 second run
+
+> **Level names.** On 2026-10-29 the levels were renumbered from the original plan's M0/M2/M3/M4 to M0/M1/M2/M3 in all code, data and docs; commits before then use the old names.
+
+- 2026-10-29 07:19 [M0] epoch 1 start: 2 runs; global spend $5.4641, this run $0.0000
+- 2026-10-29 07:19 [M0] epoch 1 finished: 2 runs written (0 errors); this run $0.0015, global $5.4656; 429s so far 0
+- 2026-10-29 07:19 [M0] epoch 1 start: 144 runs; global spend $5.4656, this run $0.0015
+- 2026-10-29 07:20 [M0] 40/144 runs; this run $0.0304, global $5.4945; 429s so far 0
+- 2026-10-29 07:21 [M0] 80/144 runs; this run $0.0550, global $5.5191; 429s so far 0
+- 2026-10-29 07:22 [M0] 120/144 runs; this run $0.0826, global $5.5468; 429s so far 0
+- 2026-10-29 07:23 [M0] epoch 1 finished: 144 runs written (0 errors); this run $0.0981, global $5.5622; 429s so far 0
+- 2026-10-29 07:23 Pilot (M0 attacked, epoch 1, 144 runs): ASR 74/144, utility 62/144, cost $0.0966 ($0.00067/run), 0 HTTP 429s, all responses model=gpt-4o-mini-2024-07-18. Decision: ASR > 0, so run the full grid for epochs 1-5 with 8 workers (no 429s seen).
+- 2026-10-29 07:23 [M0] epoch 1 start: 16 runs; global spend $5.5622, this run $0.0981
+- 2026-10-29 07:23 [M0] epoch 1 finished: 16 runs written (0 errors); this run $0.1064, global $5.5706; 429s so far 0
+- 2026-10-29 07:23 [M2-stepup] epoch 1 start: 160 runs; global spend $5.5706, this run $0.1064
+- 2026-10-29 07:24 [M2-stepup] 40/160 runs; this run $0.1409, global $5.6050; 429s so far 0
+- 2026-10-29 07:25 [M2-stepup] 80/160 runs; this run $0.1808, global $5.6450; 429s so far 0
+- 2026-10-29 07:25 [M2-stepup] 120/160 runs; this run $0.2392, global $5.7033; 429s so far 0
+- 2026-10-29 07:27 [M2-stepup] 160/160 runs; this run $0.2744, global $5.7386; 429s so far 0
+- 2026-10-29 07:27 [M2-stepup] epoch 1 finished: 160 runs written (0 errors); this run $0.2744, global $5.7386; 429s so far 0
+- 2026-10-29 07:27 [M3-stepup] epoch 1 start: 160 runs; global spend $5.7386, this run $0.2744
+- 2026-10-29 07:28 [M3-stepup] 40/160 runs; this run $0.3086, global $5.7727; 429s so far 0
+- 2026-10-29 07:28 [M3-stepup] 80/160 runs; this run $0.3442, global $5.8083; 429s so far 0
+- 2026-10-29 07:29 [M3-stepup] 120/160 runs; this run $0.3792, global $5.8433; 429s so far 0
+- 2026-10-29 07:29 [M3-stepup] 160/160 runs; this run $0.4184, global $5.8825; 429s so far 0
+- 2026-10-29 07:29 [M3-stepup] epoch 1 finished: 160 runs written (0 errors); this run $0.4184, global $5.8825; 429s so far 0
+- 2026-10-29 07:29 [M3-block] epoch 1 start: 160 runs; global spend $5.8825, this run $0.4184
+- 2026-10-29 07:30 [M3-block] 40/160 runs; this run $0.4547, global $5.9188; 429s so far 0
+- 2026-10-29 07:31 [M3-block] 80/160 runs; this run $0.5065, global $5.9706; 429s so far 0
+- 2026-10-29 07:31 [M3-block] 120/160 runs; this run $0.5395, global $6.0037; 429s so far 0
+- 2026-10-29 07:32 [M3-block] 160/160 runs; this run $0.5779, global $6.0421; 429s so far 0
+- 2026-10-29 07:32 [M3-block] epoch 1 finished: 160 runs written (0 errors); this run $0.5779, global $6.0421; 429s so far 0
+- 2026-10-29 07:32 [M1-stepup] epoch 1 start: 160 runs; global spend $6.0421, this run $0.5779
+- 2026-10-29 07:33 [M1-stepup] 40/160 runs; this run $0.6109, global $6.0750; 429s so far 0
+- 2026-10-29 07:33 [M1-stepup] 80/160 runs; this run $0.6376, global $6.1017; 429s so far 0
+- 2026-10-29 07:33 [M1-stepup] 120/160 runs; this run $0.6670, global $6.1311; 429s so far 0
+- 2026-10-29 07:34 [M1-stepup] 160/160 runs; this run $0.7011, global $6.1652; 429s so far 0
+- 2026-10-29 07:34 [M1-stepup] epoch 1 finished: 160 runs written (0 errors); this run $0.7011, global $6.1652; 429s so far 0
+- 2026-10-29 07:34 [M0] epoch 2 start: 160 runs; global spend $6.1652, this run $0.7011
+- 2026-10-29 07:35 [M0] 40/160 runs; this run $0.7301, global $6.1942; 429s so far 0
+- 2026-10-29 07:35 [M0] 80/160 runs; this run $0.7580, global $6.2221; 429s so far 0
+- 2026-10-29 07:35 [M0] 120/160 runs; this run $0.7813, global $6.2454; 429s so far 0
+- 2026-10-29 07:36 [M0] 160/160 runs; this run $0.8099, global $6.2740; 429s so far 0
+- 2026-10-29 07:36 [M0] epoch 2 finished: 160 runs written (0 errors); this run $0.8099, global $6.2740; 429s so far 0
+- 2026-10-29 07:36 [M2-stepup] epoch 2 start: 160 runs; global spend $6.2740, this run $0.8099
+- 2026-10-29 07:37 [M2-stepup] 40/160 runs; this run $0.8424, global $6.3066; 429s so far 0
+- 2026-10-29 07:37 [M2-stepup] 80/160 runs; this run $0.8778, global $6.3419; 429s so far 0
+- 2026-10-29 07:38 [M2-stepup] 120/160 runs; this run $0.9194, global $6.3835; 429s so far 0
+- 2026-10-29 07:38 [M2-stepup] 160/160 runs; this run $0.9554, global $6.4195; 429s so far 0
+- 2026-10-29 07:38 [M2-stepup] epoch 2 finished: 160 runs written (0 errors); this run $0.9554, global $6.4195; 429s so far 0
+- 2026-10-29 07:38 [M3-stepup] epoch 2 start: 160 runs; global spend $6.4195, this run $0.9554
+- 2026-10-29 07:39 [M3-stepup] 40/160 runs; this run $0.9893, global $6.4534; 429s so far 0
+- 2026-10-29 07:40 [M3-stepup] 80/160 runs; this run $1.0178, global $6.4819; 429s so far 0
+- 2026-10-29 07:40 [M3-stepup] 120/160 runs; this run $1.0647, global $6.5289; 429s so far 0
+- 2026-10-29 07:41 [M3-stepup] 160/160 runs; this run $1.1014, global $6.5655; 429s so far 0
+- 2026-10-29 07:41 [M3-stepup] epoch 2 finished: 160 runs written (0 errors); this run $1.1014, global $6.5655; 429s so far 0
+- 2026-10-29 07:41 [M3-block] epoch 2 start: 160 runs; global spend $6.5655, this run $1.1014
+- 2026-10-29 07:42 [M3-block] 40/160 runs; this run $1.1423, global $6.6064; 429s so far 0
+- 2026-10-29 07:43 [M3-block] 80/160 runs; this run $1.1943, global $6.6585; 429s so far 0
+- 2026-10-29 07:43 [M3-block] 120/160 runs; this run $1.2504, global $6.7146; 429s so far 0
+- 2026-10-29 07:44 [M3-block] 160/160 runs; this run $1.2869, global $6.7510; 429s so far 0
+- 2026-10-29 07:44 [M3-block] epoch 2 finished: 160 runs written (0 errors); this run $1.2869, global $6.7510; 429s so far 0
+- 2026-10-29 07:44 [M1-stepup] epoch 2 start: 160 runs; global spend $6.7510, this run $1.2869
+- 2026-10-29 07:44 [M1-stepup] 40/160 runs; this run $1.3199, global $6.7840; 429s so far 0
+- 2026-10-29 07:45 [M1-stepup] 80/160 runs; this run $1.3491, global $6.8132; 429s so far 0
+- 2026-10-29 07:45 [M1-stepup] 120/160 runs; this run $1.3747, global $6.8388; 429s so far 0
+- 2026-10-29 07:46 [M1-stepup] 160/160 runs; this run $1.4107, global $6.8748; 429s so far 0
+- 2026-10-29 07:46 [M1-stepup] epoch 2 finished: 160 runs written (0 errors); this run $1.4107, global $6.8748; 429s so far 0
+- 2026-10-29 07:46 [M0] epoch 3 start: 160 runs; global spend $6.8748, this run $1.4107
+- 2026-10-29 07:47 [M0] 40/160 runs; this run $1.4392, global $6.9033; 429s so far 0
+- 2026-10-29 07:47 [M0] 80/160 runs; this run $1.4684, global $6.9325; 429s so far 0
+- 2026-10-29 07:48 [M0] 120/160 runs; this run $1.4916, global $6.9557; 429s so far 0
+- 2026-10-29 07:49 [M0] 160/160 runs; this run $1.5195, global $6.9836; 429s so far 0
+- 2026-10-29 07:49 [M0] epoch 3 finished: 160 runs written (0 errors); this run $1.5195, global $6.9836; 429s so far 0
+- 2026-10-29 07:49 [M2-stepup] epoch 3 start: 160 runs; global spend $6.9836, this run $1.5195
+- 2026-10-29 07:49 [M2-stepup] 40/160 runs; this run $1.5518, global $7.0159; 429s so far 0
+- 2026-10-29 07:50 [M2-stepup] 80/160 runs; this run $1.5973, global $7.0615; 429s so far 0
+- 2026-10-29 07:50 [M2-stepup] 120/160 runs; this run $1.6417, global $7.1059; 429s so far 0
+- 2026-10-29 07:51 [M2-stepup] 160/160 runs; this run $1.6790, global $7.1431; 429s so far 0
+- 2026-10-29 07:51 [M2-stepup] epoch 3 finished: 160 runs written (0 errors); this run $1.6790, global $7.1431; 429s so far 0
+- 2026-10-29 07:51 [M3-stepup] epoch 3 start: 160 runs; global spend $7.1431, this run $1.6790
+- 2026-10-29 07:52 [M3-stepup] 40/160 runs; this run $1.7154, global $7.1795; 429s so far 0
+- 2026-10-29 07:52 [M3-stepup] 80/160 runs; this run $1.7626, global $7.2267; 429s so far 0
+- 2026-10-29 07:53 [M3-stepup] 120/160 runs; this run $1.7937, global $7.2578; 429s so far 0
+- 2026-10-29 07:54 [M3-stepup] 160/160 runs; this run $1.8322, global $7.2963; 429s so far 0
+- 2026-10-29 07:54 [M3-stepup] epoch 3 finished: 160 runs written (0 errors); this run $1.8322, global $7.2963; 429s so far 0
+- 2026-10-29 07:54 [M3-block] epoch 3 start: 160 runs; global spend $7.2963, this run $1.8322
+- 2026-10-29 07:54 [M3-block] 40/160 runs; this run $1.8680, global $7.3321; 429s so far 0
+- 2026-10-29 07:55 [M3-block] 80/160 runs; this run $1.9265, global $7.3906; 429s so far 0
+- 2026-10-29 07:56 [M3-block] 120/160 runs; this run $1.9793, global $7.4434; 429s so far 0
+- 2026-10-29 07:56 [M3-block] 160/160 runs; this run $2.0174, global $7.4815; 429s so far 0
+- 2026-10-29 07:56 [M3-block] epoch 3 finished: 160 runs written (0 errors); this run $2.0174, global $7.4815; 429s so far 0
+- 2026-10-29 07:56 [M1-stepup] epoch 3 start: 160 runs; global spend $7.4815, this run $2.0174
+- 2026-10-29 07:57 [M1-stepup] 40/160 runs; this run $2.0543, global $7.5184; 429s so far 0
+- 2026-10-29 07:57 [M1-stepup] 80/160 runs; this run $2.0900, global $7.5541; 429s so far 0
+- 2026-10-29 07:58 [M1-stepup] 120/160 runs; this run $2.1157, global $7.5798; 429s so far 0
+- 2026-10-29 07:58 [M1-stepup] 160/160 runs; this run $2.1518, global $7.6159; 429s so far 0
+- 2026-10-29 07:58 [M1-stepup] epoch 3 finished: 160 runs written (0 errors); this run $2.1518, global $7.6159; 429s so far 0
+- 2026-10-29 07:59 [M0] epoch 4 start: 160 runs; global spend $7.6159, this run $2.1518
+- 2026-10-29 07:59 [M0] 40/160 runs; this run $2.1805, global $7.6446; 429s so far 0
+- 2026-10-29 08:00 [M0] 80/160 runs; this run $2.2067, global $7.6708; 429s so far 0
+- 2026-10-29 08:00 [M0] 120/160 runs; this run $2.2480, global $7.7121; 429s so far 0
+- 2026-10-29 08:01 [M0] 160/160 runs; this run $2.2819, global $7.7461; 429s so far 0
+- 2026-10-29 08:01 [M0] epoch 4 finished: 160 runs written (0 errors); this run $2.2819, global $7.7461; 429s so far 0
+- 2026-10-29 08:01 [M2-stepup] epoch 4 start: 160 runs; global spend $7.7461, this run $2.2819
+- 2026-10-29 08:01 [M2-stepup] 40/160 runs; this run $2.3197, global $7.7839; 429s so far 0
+- 2026-10-29 08:02 [M2-stepup] 80/160 runs; this run $2.3607, global $7.8248; 429s so far 0
+- 2026-10-29 08:03 [M2-stepup] 120/160 runs; this run $2.3908, global $7.8550; 429s so far 0
+- 2026-10-29 08:03 [M2-stepup] 160/160 runs; this run $2.4303, global $7.8944; 429s so far 0
+- 2026-10-29 08:03 [M2-stepup] epoch 4 finished: 160 runs written (0 errors); this run $2.4303, global $7.8944; 429s so far 0
+- 2026-10-29 08:03 [M3-stepup] epoch 4 start: 160 runs; global spend $7.8944, this run $2.4303
+- 2026-10-29 08:04 [M3-stepup] 40/160 runs; this run $2.4688, global $7.9329; 429s so far 0
+- 2026-10-29 08:05 [M3-stepup] 80/160 runs; this run $2.5097, global $7.9739; 429s so far 0
+- 2026-10-29 08:06 [M3-stepup] 120/160 runs; this run $2.5651, global $8.0292; 429s so far 0
+- 2026-10-29 08:06 [M3-stepup] 160/160 runs; this run $2.6019, global $8.0661; 429s so far 0
+- 2026-10-29 08:06 [M3-stepup] epoch 4 finished: 160 runs written (0 errors); this run $2.6019, global $8.0661; 429s so far 0
+- 2026-10-29 08:06 [M3-block] epoch 4 start: 160 runs; global spend $8.0661, this run $2.6019
+- 2026-10-29 08:07 [M3-block] 40/160 runs; this run $2.6344, global $8.0985; 429s so far 0
+- 2026-10-29 08:08 [M3-block] 80/160 runs; this run $2.6808, global $8.1449; 429s so far 0
+- 2026-10-29 08:08 [M3-block] 120/160 runs; this run $2.7275, global $8.1916; 429s so far 0
+- 2026-10-29 08:09 [M3-block] 160/160 runs; this run $2.7669, global $8.2310; 429s so far 0
+- 2026-10-29 08:09 [M3-block] epoch 4 finished: 160 runs written (0 errors); this run $2.7669, global $8.2310; 429s so far 0
+- 2026-10-29 08:09 [M1-stepup] epoch 4 start: 160 runs; global spend $8.2310, this run $2.7669
+- 2026-10-29 08:09 [M1-stepup] 40/160 runs; this run $2.7983, global $8.2624; 429s so far 0
+- 2026-10-29 08:10 [M1-stepup] 80/160 runs; this run $2.8415, global $8.3057; 429s so far 0
+- 2026-10-29 08:10 [M1-stepup] 120/160 runs; this run $2.8694, global $8.3335; 429s so far 0
+- 2026-10-29 08:11 [M1-stepup] 160/160 runs; this run $2.9045, global $8.3686; 429s so far 0
+- 2026-10-29 08:11 [M1-stepup] epoch 4 finished: 160 runs written (0 errors); this run $2.9045, global $8.3686; 429s so far 0
+- 2026-10-29 08:11 [M0] epoch 5 start: 160 runs; global spend $8.3686, this run $2.9045
+- 2026-10-29 08:12 [M0] 40/160 runs; this run $2.9323, global $8.3964; 429s so far 0
+- 2026-10-29 08:12 [M0] 80/160 runs; this run $2.9816, global $8.4458; 429s so far 0
+- 2026-10-29 08:13 [M0] 120/160 runs; this run $3.0068, global $8.4710; 429s so far 0
+- 2026-10-29 08:13 [M0] 160/160 runs; this run $3.0389, global $8.5031; 429s so far 0
+- 2026-10-29 08:13 [M0] epoch 5 finished: 160 runs written (0 errors); this run $3.0389, global $8.5031; 429s so far 0
+- 2026-10-29 08:13 [M2-stepup] epoch 5 start: 160 runs; global spend $8.5031, this run $3.0389
+- 2026-10-29 08:14 [M2-stepup] 40/160 runs; this run $3.0769, global $8.5411; 429s so far 0
+- 2026-10-29 08:14 [M2-stepup] 80/160 runs; this run $3.1055, global $8.5696; 429s so far 0
+- 2026-10-29 08:15 [M2-stepup] 120/160 runs; this run $3.1698, global $8.6339; 429s so far 0
+- 2026-10-29 08:16 [M2-stepup] 160/160 runs; this run $3.2076, global $8.6718; 429s so far 0
+- 2026-10-29 08:16 [M2-stepup] epoch 5 finished: 160 runs written (0 errors); this run $3.2076, global $8.6718; 429s so far 0
+- 2026-10-29 08:16 [M3-stepup] epoch 5 start: 160 runs; global spend $8.6718, this run $3.2076
+- 2026-10-29 08:16 [M3-stepup] 40/160 runs; this run $3.2420, global $8.7061; 429s so far 0
+- 2026-10-29 08:17 [M3-stepup] 80/160 runs; this run $3.2892, global $8.7533; 429s so far 0
+- 2026-10-29 08:18 [M3-stepup] 120/160 runs; this run $3.3269, global $8.7910; 429s so far 0
+- 2026-10-29 08:18 [M3-stepup] 160/160 runs; this run $3.3648, global $8.8289; 429s so far 0
+- 2026-10-29 08:18 [M3-stepup] epoch 5 finished: 160 runs written (0 errors); this run $3.3648, global $8.8289; 429s so far 0
+- 2026-10-29 08:18 [M3-block] epoch 5 start: 160 runs; global spend $8.8289, this run $3.3648
+- 2026-10-29 08:19 [M3-block] 40/160 runs; this run $3.4013, global $8.8654; 429s so far 0
+- 2026-10-29 08:19 [M3-block] 80/160 runs; this run $3.4333, global $8.8975; 429s so far 0
+- 2026-10-29 08:20 [M3-block] 120/160 runs; this run $3.4659, global $8.9300; 429s so far 0
+- 2026-10-29 08:21 [M3-block] 160/160 runs; this run $3.5031, global $8.9672; 429s so far 0
+- 2026-10-29 08:21 [M3-block] epoch 5 finished: 160 runs written (0 errors); this run $3.5031, global $8.9672; 429s so far 0
+- 2026-10-29 08:21 [M1-stepup] epoch 5 start: 160 runs; global spend $8.9672, this run $3.5031
+- 2026-10-29 08:22 [M1-stepup] 40/160 runs; this run $3.5341, global $8.9983; 429s so far 0
+- 2026-10-29 08:22 [M1-stepup] 80/160 runs; this run $3.5750, global $9.0391; 429s so far 0
+- 2026-10-29 08:23 [M1-stepup] 120/160 runs; this run $3.6090, global $9.0731; 429s so far 0
+- 2026-10-29 08:23 [M1-stepup] 160/160 runs; this run $3.6436, global $9.1078; 429s so far 0
+- 2026-10-29 08:23 [M1-stepup] epoch 5 finished: 160 runs written (0 errors); this run $3.6436, global $9.1078; 429s so far 0
+- 2026-10-29 08:31 FINAL: 4000/4000 grid runs ok (epochs 1-5), 0 errors, 0 retries, 0 HTTP 429s; all responses model=gpt-4o-mini-2024-07-18. This run $3.6436 (raw $3.6421 + smoke $0.0015); cumulative all runs/providers $9.1078. Wrote RESULTS_gpt4omini.md, WRITEUP_gpt4omini.md, RESULTS_combined.md, WRITEUP_combined.md, figures/gpt4omini/frontier.png, figures/combined/frontier.png. No commits.

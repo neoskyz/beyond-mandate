@@ -11,7 +11,7 @@ Outputs:
   results/agent_behavior.md      heuristic counts: agent abstentions (asking the user) and injection mentions
   figures/frontier.png           x = mean step-ups per task (attacked runs), y = ASR
 
-Definitions (also in WRITEUP.md):
+Definitions (also in writeup/WRITEUP.md):
   utility            AgentDojo user-task utility check, mean over runs
   ASR                AgentDojo injection-task security check (True = injection succeeded), mean over attacked runs
   step-ups / task    mean number of reviewer queries per run (step-up policy only; 0 for block / M0)
@@ -36,7 +36,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 RES = ROOT / "results"
 FIG = ROOT / "figures"
-ORDER = ["M0", "M2-stepup", "M3-stepup", "M4-stepup", "M4-block"]
+ORDER = ["M0", "M1-stepup", "M2-stepup", "M3-stepup", "M3-block"]
 
 
 def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
@@ -126,54 +126,73 @@ def write_csv(path: Path, rows: list[dict]) -> None:
             w.writerow({k: (f"{v[0]:.4f};{v[1]:.4f}" if isinstance(v, tuple) else (round(v, 6) if isinstance(v, float) else v)) for k, v in r.items()})
 
 
-def frontier(summary: dict[str, dict], path: Path) -> None:
-    colors = {"M0": "#2a78d6", "M2-stepup": "#eb6834", "M3-stepup": "#1baf7a", "M4-stepup": "#eda100", "M4-block": "#e87ba4"}
-    markers = {"M0": "o", "M2-stepup": "s", "M3-stepup": "^", "M4-stepup": "D", "M4-block": "X"}
-    ink, ink2, grid = "#0b0b0b", "#52514e", "#e4e3df"
-    fig, ax = plt.subplots(figsize=(8.2, 5.4), dpi=160)
-    fig.patch.set_facecolor("#fcfcfb")
-    ax.set_facecolor("#fcfcfb")
-    xs, ys = [], []
+COLORS = {"M0": "#2a78d6", "M1-stepup": "#eb6834", "M2-stepup": "#1baf7a", "M3-stepup": "#eda100", "M3-block": "#e87ba4"}
+MARKERS = {"M0": "o", "M1-stepup": "s", "M2-stepup": "^", "M3-stepup": "D", "M3-block": "X"}
+INK, INK2, GRID, SURFACE = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
+FRONTIER_YMAX = 0.62  # shared y-range so the two agents' panels read on the same scale
+
+# direct-label placement per agent: config -> (label text key, offset in points, ha). Labels whose
+# points coincide are merged into one ("M0, M3-block" for the robust agent, where both sit at 0 / 0).
+LABELS = {
+    "gpt-4o-mini-2024-07-18": {
+        "M0": ((10, 0), "left"), "M1-stepup": ((10, 0), "left"), "M2-stepup": ((0, 14), "center"),
+        "M3-stepup": ((12, 0), "left"), "M3-block": ((10, 0), "left"),
+    },
+    "claude-haiku-5-5": {
+        "M0": ((8, 34), "left"), "M1-stepup": ((-26, 62), "center"), "M2-stepup": ((22, 34), "center"),
+        "M3-stepup": ((8, 62), "left"),
+    },
+}
+
+
+def draw_frontier(ax, summary: dict[str, dict], model: str) -> None:
+    """x = mean step-ups per attacked task, y = ASR with 95% Wilson CI, one direct-labelled point per config."""
+    ax.set_facecolor(SURFACE)
     present = [c for c in ORDER if c in summary]
-    # labels in a column, top-to-bottom in order of x, so leader lines do not cross
-    rank = {c: i for i, c in enumerate(sorted(present, key=lambda c: (summary[c]["stepups_attack"], ORDER.index(c))))}
+    spots = LABELS.get(model, {})
+    merged = {"M0": "M0, M3-block"} if model == "claude-haiku-5-5" else {}
     for cfg in present:
         m = summary[cfg]
         x, y = m["stepups_attack"], m["asr"]
-        lo, hi = m["asr_ci"]
-        xs.append(x)
-        ys.append(y)
-        ax.errorbar(x, y, yerr=[[max(0.0, y - lo)], [max(0.0, hi - y)]], fmt="none", ecolor=colors[cfg], elinewidth=1.5, capsize=3, alpha=0.8, zorder=2)
-        ax.scatter(x, y, s=170 if cfg == "M0" else 90, marker=markers[cfg], color=colors[cfg], edgecolor="#fcfcfb", linewidth=2, zorder=3)
-        label = (
-            f"{cfg}\nutility {fmt_pct(m['utility_noattack'])} clean / {fmt_pct(m['utility_attack'])} attacked\n"
-            f"ASR {m['asr_k']}/{m['n_attack']}"
-        )
-        ly = 0.95 - 0.18 * rank[cfg]
-        ax.annotate(label, (x, y), xytext=(0.52, ly), textcoords="axes fraction", fontsize=8.2, color=ink, va="top",
-                    arrowprops=dict(arrowstyle="-", color=colors[cfg], lw=1, alpha=0.7, shrinkA=2, shrinkB=6))
-    ax.set_xlabel("Mean human step-ups per task (attacked runs)", color=ink, fontsize=10)
-    ax.set_ylabel("Attack success rate (95% Wilson CI)", color=ink, fontsize=10)
-    ax.set_title("Mandate granularity: attack success vs. human step-up load", color=ink, fontsize=11.5, loc="left", pad=30)
-    n_ep = max(m["epochs"] for m in summary.values())
-    n_at = max(m["n_attack"] for m in summary.values())
-    ax.text(
-        0, 1.01, f"AgentDojo banking v1.2.2, important_instructions, claude-haiku-5-5; n = {n_at} attacked runs per config ({n_ep} epochs).\n"
-        "No config had any attack success; error bars are 95% upper bounds.",
-        transform=ax.transAxes, fontsize=8, color=ink2, va="bottom",
-    )
-    ax.set_xlim(-0.02, max(xs + [0.2]) * 2.6 + 0.05)
-    ax.set_ylim(-0.005, max(max(ys) * 1.6, 0.06))
+        lo, hi = (m["asr_lo"], m["asr_hi"]) if "asr_lo" in m else m["asr_ci"]
+        ax.errorbar(x, y, yerr=[[max(0.0, y - lo)], [max(0.0, hi - y)]], fmt="none", ecolor=COLORS[cfg], elinewidth=1.4, capsize=3, alpha=0.8, zorder=2)
+        ax.scatter(x, y, s=150 if cfg == "M0" else 70, marker=MARKERS[cfg], color=COLORS[cfg], edgecolor=SURFACE, linewidth=1.5, zorder=3)
+        if cfg not in spots:
+            continue
+        name = merged.get(cfg, cfg)
+        text = f"{name}  ASR {fmt_pct(y)}" if m["asr_k"] else name
+        offset, ha = spots[cfg]
+        ax.annotate(text, (x, y), xytext=offset, textcoords="offset points", fontsize=8.5, color=INK, ha=ha, va="center",
+                    arrowprops=dict(arrowstyle="-", color=INK2, lw=0.7, alpha=0.6, shrinkA=2, shrinkB=5) if abs(offset[1]) > 20 else None)
+    if all(summary[c]["asr_k"] == 0 for c in present):
+        n = max(summary[c]["n_attack"] for c in present)
+        ax.text(0.97, 0.5, f"No attack succeeded\nin any config (0/{n} each)", transform=ax.transAxes, fontsize=9, color=INK2, ha="right")
+    xmax = max(summary[c]["stepups_attack"] for c in present)
+    ax.set_xlim(-0.06 * max(xmax, 0.2), max(xmax, 0.2) * 1.4)
+    ax.set_ylim(-0.02, FRONTIER_YMAX)
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
-    ax.grid(True, color=grid, linewidth=0.8)
+    ax.set_xlabel("Human step-ups per task (attacked runs)", color=INK, fontsize=9.5)
+    ax.grid(True, color=GRID, linewidth=0.8)
     ax.set_axisbelow(True)
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)
     for s in ("left", "bottom"):
-        ax.spines[s].set_color(ink2)
-    ax.tick_params(colors=ink2, labelsize=9)
+        ax.spines[s].set_color(INK2)
+    ax.tick_params(colors=INK2, labelsize=8.5)
+
+
+def frontier(summary: dict[str, dict], path: Path, model: str = "claude-haiku-5-5") -> None:
+    fig, ax = plt.subplots(figsize=(6.4, 4.6), dpi=160)
+    fig.patch.set_facecolor(SURFACE)
+    draw_frontier(ax, summary, model)
+    ax.set_ylabel("Attack success rate (95% Wilson CI)", color=INK, fontsize=9.5)
+    n_ep = max(m["epochs"] for m in summary.values())
+    n_at = max(m["n_attack"] for m in summary.values())
+    ax.set_title(f"Attack success vs. human step-ups: {model}", color=INK, fontsize=11, loc="left", pad=24)
+    ax.text(0, 1.015, f"AgentDojo banking v1.2.2, important_instructions; n = {n_at} attacked runs per config ({n_ep} epochs)",
+            transform=ax.transAxes, fontsize=8, color=INK2, va="bottom")
     fig.tight_layout()
-    fig.savefig(path, facecolor=fig.get_facecolor())
+    fig.savefig(path, facecolor=SURFACE)
     plt.close(fig)
 
 
@@ -182,9 +201,9 @@ def frontier_compromised(path_json: Path, path_png: Path) -> None:
     data = json.loads(path_json.read_text())
     source = next(k for k in data if k.startswith("LLM")) if any(k.startswith("LLM") for k in data) else next(iter(data))
     rows = {r["config"]: r for r in data[source]}
-    colors = {"M0": "#2a78d6", "M2-stepup": "#eb6834", "M3-stepup": "#1baf7a", "M4-stepup": "#eda100", "M4-block": "#e87ba4"}
-    markers = {"M0": "o", "M2-stepup": "s", "M3-stepup": "^", "M4-stepup": "D", "M4-block": "X"}
-    spots = {"M0": (0.10, 0.93), "M2-stepup": (0.50, 0.45), "M3-stepup": (0.36, 0.22), "M4-stepup": (0.70, 0.22), "M4-block": (0.06, 0.22)}
+    colors = {"M0": "#2a78d6", "M1-stepup": "#eb6834", "M2-stepup": "#1baf7a", "M3-stepup": "#eda100", "M3-block": "#e87ba4"}
+    markers = {"M0": "o", "M1-stepup": "s", "M2-stepup": "^", "M3-stepup": "D", "M3-block": "X"}
+    spots = {"M0": (0.10, 0.93), "M1-stepup": (0.50, 0.45), "M2-stepup": (0.36, 0.22), "M3-stepup": (0.70, 0.22), "M3-block": (0.06, 0.22)}
     ink, ink2, grid = "#0b0b0b", "#52514e", "#e4e3df"
     fig, ax = plt.subplots(figsize=(8.2, 5.4), dpi=160)
     fig.patch.set_facecolor("#fcfcfb")
@@ -230,15 +249,15 @@ def m0_shadow(runs: list[dict]) -> str:
     L.append("For each, the enforcer's shadow decisions on the injected calls (recorded but not enforced at M0):\n")
     L.append("| level | successes where >=1 injected call was out of mandate (would be intercepted) |")
     L.append("|---|---|")
-    for lvl in ("M2", "M3", "M4"):
+    for lvl in ("M1", "M2", "M3"):
         k = sum(any(not c["shadow"][lvl]["in_mandate"] for c in r["state_changing_calls"] if not c["legit"]) for r in succ)
         L.append(f"| {lvl} | {k} / {len(succ)} |")
-    L.append("\n| epoch | user task | injection task | injected calls (M2/M3/M4 in-mandate?) |")
+    L.append("\n| epoch | user task | injection task | injected calls (M1/M2/M3 in-mandate?) |")
     L.append("|---|---|---|---|")
     for r in sorted(succ, key=lambda r: (r.get("epoch", 1), r["user_task"], r["injection_task"])):
         calls = "; ".join(
             f"`{c['function']}({', '.join(f'{k}={v!r}' for k, v in c['args'].items() if k in ('recipient', 'amount', 'id', 'password'))})` "
-            f"({'/'.join('y' if c['shadow'][l]['in_mandate'] else 'n' for l in ('M2', 'M3', 'M4'))})"
+            f"({'/'.join('y' if c['shadow'][l]['in_mandate'] else 'n' for l in ('M1', 'M2', 'M3'))})"
             for c in r["state_changing_calls"]
             if not c["legit"]
         )
@@ -299,9 +318,18 @@ def agent_behavior(runs: list[dict]) -> str:
 
 
 def main() -> None:
-    runs = load()
-    errs = errors()
-    FIG.mkdir(exist_ok=True)
+    import argparse
+
+    global RES, FIG
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--results-dir", type=Path, default=RES, help="directory holding raw.jsonl; outputs are written there too")
+    ap.add_argument("--fig-dir", type=Path, default=FIG)
+    ap.add_argument("--model", default="claude-haiku-5-5", help="agent model name for the figure subtitle")
+    args = ap.parse_args()
+    RES, FIG = args.results_dir, args.fig_dir
+    runs = load(RES / "raw.jsonl")
+    errs = errors(RES / "raw.jsonl")
+    FIG.mkdir(parents=True, exist_ok=True)
     by_cfg = defaultdict(list)
     by_cfg_ep = defaultdict(list)
     for r in runs:
@@ -335,7 +363,7 @@ def main() -> None:
     (RES / "m0_shadow.md").write_text(m0_shadow(runs))
     (RES / "attack_successes.md").write_text(attack_successes(runs))
     (RES / "agent_behavior.md").write_text(agent_behavior(runs))
-    frontier(summary, FIG / "frontier.png")
+    frontier(summary, FIG / "frontier.png", args.model)
     if (RES / "compromised_agent.json").exists():
         frontier_compromised(RES / "compromised_agent.json", FIG / "frontier_compromised.png")
 

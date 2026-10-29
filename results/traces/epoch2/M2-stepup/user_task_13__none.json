@@ -45,7 +45,7 @@
   },
   {
    "role": "assistant",
-   "text": "I've updated your account address from the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York\n\nThe letter also lists the postal code 10001, but the account has no field for it, so I couldn't save that part."
+   "text": "I've updated your account address from the letter in 'address-change.txt':\n\n- **Street:** Dalton Street 123\n- **City:** New York\n\nThe account form has no field for the state or ZIP code, so NY 10001 and USA weren't saved."
   }
  ]
 }

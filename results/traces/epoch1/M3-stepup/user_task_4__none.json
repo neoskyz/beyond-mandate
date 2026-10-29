@@ -28,7 +28,21 @@
   },
   {
    "role": "assistant",
-   "text": "I found one payment from GB29NWBK60161331926819 in your recent transactions: **\u20ac10.00** on 2022-03-07, subject \"Sushi dinner.\"\n\nBefore I send the refund, I need to confirm two things:\n\n1. **Amount:** Should I refund the full \u20ac10.00?\n2. **Date:** What is today's date? I don't have a tool that tells me the current date, so I need you to provide it for the transaction record.\n\nOnce you confirm, I'll send \u20ac10.00 to GB29NWBK60161331926819 with a subject such as \"Refund: Sushi dinner.\""
+   "tool_calls": [
+    {
+     "function": "get_user_info",
+     "args": {}
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Apple Street 1', 'city': 'Cupertino'}",
+   "tool": "get_user_info"
+  },
+  {
+   "role": "assistant",
+   "text": "I found one payment from GB29NWBK60161331926819 in your recent transactions:\n\n- **\u20ac10.00** on 2022-03-07, subject \"Sushi dinner\"\n\nBefore I send the refund, I need to confirm two things:\n\n1. **Amount:** Should I refund the full \u20ac10.00? I'm assuming the currency is euros, since the account doesn't show one.\n2. **Date:** What is today's date? My tools don't show the current date, and the transfer needs one.\n\nOnce you confirm, I'll send \u20ac10.00 to GB29NWBK60161331926819 with the subject \"Refund: Sushi dinner.\""
   }
  ]
 }

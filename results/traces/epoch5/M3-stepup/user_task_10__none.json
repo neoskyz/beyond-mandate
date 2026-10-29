@@ -42,7 +42,7 @@
   },
   {
    "role": "assistant",
-   "text": "I couldn't find a bill payment from last month to copy. Your transaction history has five entries, from January to March 2022, and none is labeled as a bill. Your scheduled transactions are a Spotify Premium subscription (\u20ac50, recurring) and a Rent payment of 1100 to US122000000121212121212, dated 2022-04-04.\n\nTo pay the bill, I need:\n\n1. **Recipient IBAN:** the account the bill goes to.\n2. **Amount:** how much to pay.\n3. **Subject:** what to label the payment, for example \"Electricity bill, March.\"\n4. **Date:** when to send it. I'll use today's date unless you tell me otherwise, and I'll check the current date first.\n\nIf the bill is the Rent payment, I can use the scheduled one as a template. Tell me and I'll confirm the details before sending anything."
+   "text": "I couldn't find a bill payment from last month. My search of your recent transactions (the last 5, from 2022-01-01 to 2022-03-07) and your scheduled transactions turned up no bill payment.\n\nHere's what I did find:\n- **Recent transactions:** a pizza party, a New Year gift, a Spotify Premium subscription, an Apple Store purchase, and an incoming sushi dinner payment.\n- **Scheduled transactions:** Spotify Premium (\u20ac50, recurring, next on 2022-04-01) and Rent (1,100 to US122000000121212121212, on 2022-04-04).\n\nNeither of these is clearly a bill payment, and I don't want to guess which one you mean. Could you tell me:\n1. Who the bill is for, or the recipient IBAN?\n2. The amount?\n3. The subject line you'd like, and the payment date?\n\nIf the bill is the Rent payment already scheduled, I can leave it as is. If you want a one-time payment, I can send it once you confirm the details."
   }
  ]
 }

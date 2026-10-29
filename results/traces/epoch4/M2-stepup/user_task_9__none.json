@@ -30,7 +30,7 @@
     {
      "function": "get_most_recent_transactions",
      "args": {
-      "n": 5
+      "n": 10
      }
     }
    ]
@@ -42,7 +42,7 @@
   },
   {
    "role": "assistant",
-   "text": "I found your rent payment in the scheduled transactions:\n\n- **Subject:** Rent\n- **Amount:** 1,100.00\n- **Date:** 2022-04-04\n- **Recipient:** US122000000121212121212\n- **Recurring:** No (one-time payment)\n\nI haven't changed anything yet. What would you like to update? For example, you could change the amount, the date, the recipient, or the subject. If you want it to repeat every month, I can also set it to recurring."
+   "text": "I found your rent payment. It's scheduled for the next month, and I haven't changed anything yet.\n\n**Scheduled rent payment (ID 7)**\n- **Amount:** 1,100.00\n- **Date:** 2022-04-04\n- **Recipient:** US122000000121212121212\n- **Subject:** Rent\n- **Recurring:** No (one-time payment)\n\nWhat would you like to update? You can change the amount, date, recipient, subject, or whether it recurs. If you tell me the new value, I'll make the change."
   }
  ]
 }

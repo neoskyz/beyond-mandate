@@ -38,7 +38,7 @@ RESULTS = ROOT / "results"
 RAW = RESULTS / "raw.jsonl"
 SMOKE = RESULTS / "smoke.jsonl"
 TRACES = RESULTS / "traces"
-PROGRESS = ROOT / "PROGRESS.md"
+PROGRESS = ROOT / "PROGRESS_haiku.md"
 
 SUITE_VERSION = "v1.2.2"
 SUITE_NAME = "banking"
@@ -49,10 +49,10 @@ MAX_RUN_RETRIES = 2
 
 CONFIGS: dict[str, tuple[Level, Policy]] = {
     "M0": (Level.M0, Policy.BLOCK),  # policy irrelevant at M0
-    "M3-stepup": (Level.M3, Policy.STEPUP),
-    "M4-stepup": (Level.M4, Policy.STEPUP),
-    "M4-block": (Level.M4, Policy.BLOCK),
     "M2-stepup": (Level.M2, Policy.STEPUP),
+    "M3-stepup": (Level.M3, Policy.STEPUP),
+    "M3-block": (Level.M3, Policy.BLOCK),
+    "M1-stepup": (Level.M1, Policy.STEPUP),
 }
 PRIORITY = list(CONFIGS)
 
@@ -119,8 +119,13 @@ class SpendTracker:
 ADJUSTMENTS = RESULTS / "spend_adjustments.json"
 
 
+def spend_files() -> list[Path]:
+    """Every file holding paid-run records: results/*.jsonl and the second-model run's results/gpt4omini/*.jsonl."""
+    return sorted(RESULTS.glob("*.jsonl")) + sorted(RESULTS.glob("gpt4omini/*.jsonl"))
+
+
 def total_recorded_spend() -> float:
-    recorded = sum(r.get("cost_usd_all_attempts", r.get("cost_usd", 0.0)) for p in sorted(RESULTS.glob("*.jsonl")) for r in read_records(p))
+    recorded = sum(r.get("cost_usd_all_attempts", r.get("cost_usd", 0.0)) for p in spend_files() for r in read_records(p))
     extra = sum(e["usd"] for e in json.loads(ADJUSTMENTS.read_text())["entries"]) if ADJUSTMENTS.exists() else 0.0
     return recorded + extra
 
@@ -143,9 +148,25 @@ def compact_trace(messages) -> list[dict]:
     return out
 
 
+class FatalRunError(Exception):
+    """Raised by a run to stop the whole job instead of retrying (e.g. the API served a different model)."""
+
+
 def run_one(
-    config: str, user_task_id: str, injection_task_id: str | None, suite, attack, meter: UsageMeter, epoch: int = 1
+    config: str,
+    user_task_id: str,
+    injection_task_id: str | None,
+    suite,
+    attack,
+    meter: UsageMeter,
+    epoch: int = 1,
+    llm=None,
+    make_mandate=None,
+    model: str = MODEL,
+    trace_root: Path | None = None,
 ) -> dict:
+    """llm / make_mandate / model / trace_root default to the Haiku 5.5 setup; the second-model run
+    (mandate_bench/openai_run.py) passes its own agent and replays recorded mandates."""
     level, policy = CONFIGS[config]
     user_task = suite.get_user_task_by_id(user_task_id)
     injection_task = suite.get_injection_task_by_id(injection_task_id) if injection_task_id else None
@@ -161,13 +182,15 @@ def run_one(
     events: list[dict] = []
     mandate_box: dict[str, MandateResult] = {}
 
-    client = thread_client()
-    llm = ClaudeLLM(client, meter)
+    if llm is None or make_mandate is None:
+        client = thread_client()
+        llm = llm or ClaudeLLM(client, meter)
+        make_mandate = make_mandate or make_llm_mandate_fn(client, meter)
     pipeline = build_pipeline(
         level,
         policy,
         llm,
-        make_llm_mandate_fn(client, meter),
+        make_mandate,
         lambda r: mandate_box.setdefault("result", r),
         payees,
         cap,
@@ -200,7 +223,8 @@ def run_one(
     )
 
     mres = mandate_box.get("result")
-    trace_root = TRACES if attack.name == "important_instructions" else TRACES / attack.name
+    if trace_root is None:
+        trace_root = TRACES if attack.name == "important_instructions" else TRACES / attack.name
     trace_path = trace_root / f"epoch{epoch}" / config / f"{user_task_id}__{injection_task_id or 'none'}.json"
     trace_path.parent.mkdir(parents=True, exist_ok=True)
     trace_path.write_text(json.dumps({"prompt": user_task.PROMPT, "injections": injections, "messages": compact_trace(messages)}, indent=1, default=str))
@@ -232,7 +256,7 @@ def run_one(
         "n_messages": len(messages),
         "usage": meter.to_dict(),
         "cost_usd": round(meter.cost_usd, 6),
-        "model": MODEL,
+        "model": model,
         "suite_version": SUITE_VERSION,
         "agentdojo_commit": AGENTDOJO_COMMIT,
         "seconds": round(time.time() - t0, 1),
@@ -242,18 +266,25 @@ def run_one(
     }
 
 
-def run_with_retries(config, ut, it, suite, attack, spend: SpendTracker, epoch: int) -> dict:
+def run_with_retries(config, ut, it, suite, attack, spend: SpendTracker, epoch: int, meter_cls=UsageMeter, **run_kwargs) -> dict:
+    """run_kwargs: either nothing (Haiku) or a `setup(meter) -> dict` callable under key "setup"
+    returning run_one's llm / make_mandate / model / trace_root for a fresh meter."""
     failed_cost = 0.0
     errors = []
+    setup = run_kwargs.pop("setup", None)
     for attempt in range(1 + MAX_RUN_RETRIES):
-        meter = UsageMeter()
+        meter = meter_cls()
         try:
-            rec = run_one(config, ut, it, suite, attack, meter, epoch)
+            extra = setup(meter) if setup else {}
+            rec = run_one(config, ut, it, suite, attack, meter, epoch, **extra, **run_kwargs)
             rec["run_attempts"] = attempt + 1
             rec["errors"] = errors
             rec["cost_usd_all_attempts"] = round(rec["cost_usd"] + failed_cost, 6)
             spend.add(rec["cost_usd"])  # failed attempts were already added
             return rec
+        except FatalRunError:
+            spend.add(meter.cost_usd)
+            raise
         except Exception as e:  # noqa: BLE001 -- log and retry any failure
             errors.append(f"{type(e).__name__}: {str(e)[:500]}")
             failed_cost += meter.cost_usd

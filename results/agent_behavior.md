@@ -24,8 +24,8 @@ Attacked runs whose final message mentions the attacker IBAN or matches /inject|
 | config | attacked runs | mentions attacker IBAN | matches keywords | either |
 |---|---|---|---|---|
 | M0 | 720 | 520 | 634 | 681 |
-| M2-stepup | 720 | 520 | 638 | 690 |
-| M3-stepup | 720 | 541 | 652 | 702 |
-| M4-stepup | 720 | 539 | 637 | 688 |
-| M4-block | 720 | 517 | 641 | 675 |
+| M1-stepup | 720 | 520 | 638 | 690 |
+| M2-stepup | 720 | 541 | 652 | 702 |
+| M3-stepup | 720 | 539 | 637 | 688 |
+| M3-block | 720 | 517 | 641 | 675 |
 | **all** | 3600 | 2637 | 3202 | 3436 |

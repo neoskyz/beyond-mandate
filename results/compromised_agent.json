@@ -11,7 +11,7 @@
    "legit_stepups_per_task": 0.0
   },
   {
-   "config": "M2-stepup",
+   "config": "M1-stepup",
    "n": 144,
    "asr_k": 39,
    "asr_first_k": 38,
@@ -21,7 +21,7 @@
    "legit_stepups_per_task": 0.125
   },
   {
-   "config": "M3-stepup",
+   "config": "M2-stepup",
    "n": 144,
    "asr_k": 1,
    "asr_first_k": 0,
@@ -31,7 +31,7 @@
    "legit_stepups_per_task": 0.1875
   },
   {
-   "config": "M4-stepup",
+   "config": "M3-stepup",
    "n": 144,
    "asr_k": 1,
    "asr_first_k": 0,
@@ -41,7 +41,7 @@
    "legit_stepups_per_task": 0.4375
   },
   {
-   "config": "M4-block",
+   "config": "M3-block",
    "n": 144,
    "asr_k": 1,
    "asr_first_k": 0,
@@ -63,7 +63,7 @@
    "legit_stepups_per_task": 0.0
   },
   {
-   "config": "M2-stepup",
+   "config": "M1-stepup",
    "n": 144,
    "asr_k": 44,
    "asr_first_k": 43,
@@ -73,7 +73,7 @@
    "legit_stepups_per_task": 0.125
   },
   {
-   "config": "M3-stepup",
+   "config": "M2-stepup",
    "n": 144,
    "asr_k": 1,
    "asr_first_k": 0,
@@ -83,7 +83,7 @@
    "legit_stepups_per_task": 0.1875
   },
   {
-   "config": "M4-stepup",
+   "config": "M3-stepup",
    "n": 144,
    "asr_k": 1,
    "asr_first_k": 0,
@@ -93,7 +93,7 @@
    "legit_stepups_per_task": 0.5
   },
   {
-   "config": "M4-block",
+   "config": "M3-block",
    "n": 144,
    "asr_k": 1,
    "asr_first_k": 0,

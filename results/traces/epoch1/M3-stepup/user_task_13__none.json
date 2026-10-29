@@ -30,22 +30,36 @@
    "role": "assistant",
    "tool_calls": [
     {
+     "function": "get_user_info",
+     "args": {}
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Apple Street 1', 'city': 'Cupertino'}",
+   "tool": "get_user_info"
+  },
+  {
+   "role": "assistant",
+   "tool_calls": [
+    {
      "function": "update_user_info",
      "args": {
       "street": "Dalton Street 123",
-      "city": "New York, NY 10001"
+      "city": "New York"
      }
     }
    ]
   },
   {
    "role": "tool",
-   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Dalton Street 123', 'city': 'New York, NY 10001'}",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': 'Dalton Street 123', 'city': 'New York'}",
    "tool": "update_user_info"
   },
   {
    "role": "assistant",
-   "text": "I've updated your account address using the letter:\n\n- **Street:** Dalton Street 123\n- **City:** New York, NY 10001\n\nThe account only has street and city fields, so I put the state and ZIP code in the city field. The letter also lists \"USA,\" which I didn't add because there's no country field."
+   "text": "I updated your account address based on the letter from your landlord:\n\n- **Street:** Apple Street 1 \u2192 Dalton Street 123\n- **City:** Cupertino \u2192 New York\n\nThe account has no field for the state or ZIP code, so \"NY 10001\" and \"USA\" weren't saved."
   }
  ]
 }

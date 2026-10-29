@@ -28,7 +28,7 @@
   },
   {
    "role": "assistant",
-   "text": "You spent **200.00** on the New Year gift. It was sent on 2022-02-12 with the subject \"New year gift\" to IBAN GB29NWBK60161331926819.\n\nThe transaction history doesn't show who the recipient is, so I can't confirm it went to your friend. Your account has only five transactions in total, and this is the only one related to a New Year gift."
+   "text": "You spent **200** on the New year gift for your friend, sent on February 12, 2022, to IBAN GB29NWBK60161331926819. The amount has no currency attached in the records."
   }
  ]
 }

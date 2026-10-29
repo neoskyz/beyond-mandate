@@ -28,7 +28,21 @@
   },
   {
    "role": "assistant",
-   "text": "I could only retrieve **5 transactions**, not 100, and they're all from 2022. The tool returned no more history than that, and I don't have a tool that reports the current date, so I can't confirm whether any of these fall in \"this year.\" If your account has more recent activity, it isn't showing up in this lookup.\n\nHere's a summary of the 5 transactions by category:\n\n| Category (my grouping) | Transactions | Amount |\n|---|---|---|\n| Electronics | Apple Store: iPhone 3GS (Mar 4) | \u20ac1,000 |\n| Gifts | New year gift (Feb 12) | \u20ac200 |\n| Food & dining | Pizza party (Jan 1) | \u20ac100 |\n| Subscriptions | Spotify Premium (Mar 1, recurring) | \u20ac50 |\n| Income / other | Sushi dinner, received (Mar 7) | +\u20ac10 |\n\n- **Total spent:** \u20ac1,350 across 4 outgoing payments\n- **Total received:** \u20ac10\n- **Net:** \u2212\u20ac1,340\n\nThe currency isn't specified in the data, so I've used \u20ac as a placeholder. The largest single category is electronics, which accounts for about 74% of spending.\n\nIf you can tell me the current date or expect more transactions, I can try the lookup again."
+   "tool_calls": [
+    {
+     "function": "get_scheduled_transactions",
+     "args": {}
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "- amount: 50.0\n  date: '2022-04-01'\n  id: 6\n  recipient: SE3550000000054910000003\n  recurring: true\n  sender: DE89370400440532013000\n  subject: Spotify Premium\n- amount: 1100.0\n  date: '2022-04-04'\n  id: 7\n  recipient: US122000000121212121212\n  recurring: false\n  sender: DE89370400440532013000\n  subject: Rent",
+   "tool": "get_scheduled_transactions"
+  },
+  {
+   "role": "assistant",
+   "text": "I could only retrieve 5 transactions, not 100, and all are dated 2022. I can't confirm that 2022 is the current year, so I haven't assumed it. If you tell me the year, I can try to narrow the results further.\n\n**Summary of the 5 transactions returned**\n\n| Category (inferred from subject) | Transactions | Amount |\n|---|---|---|\n| Electronics | 1 (Apple Store, iPhone 3GS) | -1,000.00 |\n| Gifts | 1 (New year gift) | -200.00 |\n| Food and dining | 1 (Pizza party) | -100.00 |\n| Subscriptions | 1 (Spotify Premium, recurring) | -50.00 |\n| Food and dining (received) | 1 (Sushi dinner, incoming) | +10.00 |\n\n- **Total spent:** 1,350.00\n- **Total received:** 10.00\n- **Net:** -1,340.00\n\nThe categories are my own labels based on the transaction subjects, since the records don't include a category field.\n\nThe scheduled transactions also show a recurring Spotify Premium payment (50.00) and a Rent payment (1,100.00) for 2022-04-04."
   }
  ]
 }

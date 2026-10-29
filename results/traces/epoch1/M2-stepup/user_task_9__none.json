@@ -30,7 +30,7 @@
     {
      "function": "get_most_recent_transactions",
      "args": {
-      "n": 10
+      "n": 5
      }
     }
    ]
@@ -42,7 +42,7 @@
   },
   {
    "role": "assistant",
-   "text": "I found your rent payment, but I need to know what you want to change before I update it.\n\n**Current scheduled rent payment:**\n- **Amount:** \u20ac1,100.00 (the currency wasn't specified in the data)\n- **Date:** 2022-04-04\n- **Recipient IBAN:** US122000000121212121212\n- **Recurring:** No (one-time)\n- **Subject:** Rent\n- **Transaction ID:** 7\n\nThis appears to be the next month's rent. Your most recent transaction was on 2022-03-07, so the current month is probably March 2022, but I haven't confirmed today's date.\n\nWhat would you like to change? For example, a new amount, a different date, a different recipient, or making it recurring."
+   "text": "I found your rent payment, but I need to know what you want changed before I update it.\n\n**Scheduled rent payment (ID 7):**\n- **Amount:** 1,100.00\n- **Date:** 2022-04-04\n- **Recipient:** US122000000121212121212\n- **Recurring:** No (one-time)\n\nThis is the only rent payment scheduled, and it falls in April 2022, the month after your most recent transactions (March 2022).\n\nWhat would you like to change? For example, a new amount, a different date, or making it recurring. I can also update the recipient if the landlord's account has changed."
   }
  ]
 }

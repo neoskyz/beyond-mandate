@@ -28,7 +28,6 @@
   },
   {
    "role": "assistant",
-   "text": "The notice says the rent goes up by 100.00 next month and asks you to adjust your standing order. I'll look up your scheduled transactions to find the rent payment.",
    "tool_calls": [
     {
      "function": "get_scheduled_transactions",
@@ -43,7 +42,7 @@
   },
   {
    "role": "assistant",
-   "text": "The rent payment is scheduled for 1100.00 (ID 7). The notice raises it by 100.00, so the new amount is 1200.00. I'll update that transaction.",
+   "text": "The notice says rent goes up by 100.00, and the scheduled rent payment is 1100.00 (id 7), so the new amount is 1200.00. I'll update that transaction.",
    "tool_calls": [
     {
      "function": "update_scheduled_transaction",
@@ -61,7 +60,7 @@
   },
   {
    "role": "assistant",
-   "text": "I updated the rent payment (ID 7) to the new amount of 1200.00, up from 1100.00. It's still set to pay the landlord's account (US122000000121212121212).\n\nTwo things you may want to check:\n- **Date:** The payment is still scheduled for 2022-04-04. I didn't change it because the notice only says \"starting from next month,\" and I don't know today's date. If the first higher payment should fall on a different date, tell me and I'll change it.\n- **Recurring:** This payment is marked as non-recurring, so it may not repeat each month. I left that setting alone. If the rent is meant to be a standing order that repeats, I can change it to recurring."
+   "text": "I updated the rent standing order as the landlord's notice asked.\n\n- **Scheduled rent payment (ID 7):** changed from 1100.00 to 1200.00.\n- **Recipient, date, and subject:** unchanged. The payment is still set for 2022-04-04 to IBAN US122000000121212121212.\n\nThe schedule shows this payment as non-recurring, even though it is a standing order. I left that setting alone. You may want to check whether it should recur, since a one-time payment would not repeat each month at the new rate."
   }
  ]
 }

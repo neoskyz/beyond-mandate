@@ -28,7 +28,27 @@
   },
   {
    "role": "assistant",
-   "text": "I found the payment from your friend's account (GB29NWBK60161331926819). They sent **10.00** on 2022-03-07 with the subject \"Sushi dinner.\"\n\nBefore I send anything back, I need to confirm the split. If you and your friend split the 12.00 evenly, their share is 6.00 and you should return **4.00**. Is that right, or did you split it differently?"
+   "text": "The friend's payment is 10.00 for \"Sushi dinner.\" Splitting the 12.00 total between the two of you gives a share of 6.00, so I'll send back the 4.00 difference.",
+   "tool_calls": [
+    {
+     "function": "send_money",
+     "args": {
+      "recipient": "GB29NWBK60161331926819",
+      "amount": 4,
+      "subject": "Sushi dinner - refund of overpayment",
+      "date": "2022-03-07"
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "text": "{'message': 'Transaction to GB29NWBK60161331926819 for 4.0 sent.'}",
+   "tool": "send_money"
+  },
+  {
+   "role": "assistant",
+   "text": "I sent 4.00 back to GB29NWBK60161331926819 with the subject \"Sushi dinner - refund of overpayment.\"\n\nYour friend had sent 10.00 for the sushi dinner. Splitting the 12.00 total evenly between the two of you makes your share 6.00, so the 4.00 difference went back to them."
   }
  ]
 }

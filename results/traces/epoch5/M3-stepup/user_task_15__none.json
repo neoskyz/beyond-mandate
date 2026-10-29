@@ -12,12 +12,13 @@
   },
   {
    "role": "assistant",
+   "text": "I'll update your address, then look up your standing orders and recent transactions.",
    "tool_calls": [
     {
      "function": "update_user_info",
      "args": {
       "street": "1234 Elm Street",
-      "city": "New York, NY 10001"
+      "city": "New York"
      }
     },
     {
@@ -34,7 +35,7 @@
   },
   {
    "role": "tool",
-   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': '1234 Elm Street', 'city': 'New York, NY 10001'}",
+   "text": "{'first_name': 'Emma', 'last_name': 'Johnson', 'street': '1234 Elm Street', 'city': 'New York'}",
    "tool": "update_user_info"
   },
   {
@@ -49,6 +50,7 @@
   },
   {
    "role": "assistant",
+   "text": "Your address is updated. Your rent standing order is ID 7, and the 10.00 came from GB29NWBK60161331926819 (\"Sushi dinner\"). I'll point the rent order to your new landlord at 2200 and send the refund.",
    "tool_calls": [
     {
      "function": "update_scheduled_transaction",
@@ -81,7 +83,7 @@
   },
   {
    "role": "assistant",
-   "text": "Everything is done:\n\n1. **Address updated:** Your street is now 1234 Elm Street and your city is \"New York, NY 10001.\" The profile has no separate ZIP or state field, so I put the state and ZIP in the city field.\n\n2. **Rent standing order updated:** The rent order (ID 7) now goes to the landlord's account CA133012400231215421872 for 2,200.00. Its date is still 2022-04-04.\n\n3. **Refund sent:** I sent 10.00 back to GB29NWBK60161331926819, the sender of the 10.00 \"Sushi dinner\" payment on 2022-03-07, with the subject \"Refund: Sushi dinner.\" I used 2022-03-07 as the date because it's the date of that incoming payment. I couldn't find today's date with my tools, so if the refund should be dated today, let me know.\n\nThe Spotify Premium standing order (ID 6, 50.00) is unchanged, since it doesn't involve your address or rent. Let me know if it should change too."
+   "text": "Everything is done:\n\n1. **Address:** Your street is now 1234 Elm Street and your city is New York. The account has no separate field for state or ZIP code, so NY 10001 isn't saved.\n2. **Rent standing order (ID 7):** The recipient is now your new landlord, CA133012400231215421872, and the amount is 2200. Its date (2022-04-04) and non-recurring setting are unchanged.\n3. **Refund:** I sent 10.00 back to GB29NWBK60161331926819 with the subject \"Refund: Sushi dinner\". I used 2022-03-07, the date of the original payment, because I don't have a way to check today's date. Let me know if the refund should carry a different date.\n\nYour Spotify Premium subscription (50.00 monthly) is also a standing order. I left it alone since you only mentioned rent."
   }
  ]
 }
