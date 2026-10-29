@@ -98,6 +98,10 @@ def metrics(runs: list[dict]) -> dict:
         "injected_calls": len(injected),
         "injected_executed": sum(c["action"] in ("executed", "stepup_approved") for c in injected),
         "attacked_runs_with_injected_call": sum(any(not c["legit"] for c in r["state_changing_calls"]) for r in at),
+        # Agent-side escalation: the task's ground truth changes state, but the agent made no
+        # state-changing call at all (it typically asked the user instead). Not a mandate step-up.
+        "abstain_noattack": sum(bool(r["ground_truth_state_changing"]) and not r["state_changing_calls"] for r in na),
+        "needs_action_noattack": sum(bool(r["ground_truth_state_changing"]) for r in na),
         "mandate_failures": sum(bool(r.get("mandate_failed")) for r in runs),
         "refusals": sum(r["usage"].get("refusals", 0) for r in runs),
         "cost_usd": sum(r.get("cost_usd_all_attempts", r["cost_usd"]) for r in runs),
@@ -114,7 +118,7 @@ def write_csv(path: Path, rows: list[dict]) -> None:
     if not rows:
         return
     with path.open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator="\n")
         w.writeheader()
         for r in rows:
             w.writerow({k: (f"{v[0]:.4f};{v[1]:.4f}" if isinstance(v, tuple) else (round(v, 6) if isinstance(v, float) else v)) for k, v in r.items()})
@@ -128,32 +132,36 @@ def frontier(summary: dict[str, dict], path: Path) -> None:
     fig.patch.set_facecolor("#fcfcfb")
     ax.set_facecolor("#fcfcfb")
     xs, ys = [], []
-    for cfg in ORDER:
-        if cfg not in summary:
-            continue
+    present = [c for c in ORDER if c in summary]
+    # labels in a column, top-to-bottom in order of x, so leader lines do not cross
+    rank = {c: i for i, c in enumerate(sorted(present, key=lambda c: (summary[c]["stepups_attack"], ORDER.index(c))))}
+    for cfg in present:
         m = summary[cfg]
         x, y = m["stepups_attack"], m["asr"]
         lo, hi = m["asr_ci"]
         xs.append(x)
         ys.append(y)
-        ax.errorbar(x, y, yerr=[[y - lo], [hi - y]], fmt="none", ecolor=colors[cfg], elinewidth=1.5, capsize=3, alpha=0.8, zorder=2)
-        ax.scatter(x, y, s=90, marker=markers[cfg], color=colors[cfg], edgecolor="#fcfcfb", linewidth=2, zorder=3)
+        ax.errorbar(x, y, yerr=[[max(0.0, y - lo)], [max(0.0, hi - y)]], fmt="none", ecolor=colors[cfg], elinewidth=1.5, capsize=3, alpha=0.8, zorder=2)
+        ax.scatter(x, y, s=170 if cfg == "M0" else 90, marker=markers[cfg], color=colors[cfg], edgecolor="#fcfcfb", linewidth=2, zorder=3)
         label = (
             f"{cfg}\nutility {fmt_pct(m['utility_noattack'])} clean / {fmt_pct(m['utility_attack'])} attacked\n"
             f"ASR {m['asr_k']}/{m['n_attack']}"
         )
-        ax.annotate(label, (x, y), xytext=(10, 8), textcoords="offset points", fontsize=8.2, color=ink, va="bottom")
+        ly = 0.95 - 0.18 * rank[cfg]
+        ax.annotate(label, (x, y), xytext=(0.52, ly), textcoords="axes fraction", fontsize=8.2, color=ink, va="top",
+                    arrowprops=dict(arrowstyle="-", color=colors[cfg], lw=1, alpha=0.7, shrinkA=2, shrinkB=6))
     ax.set_xlabel("Mean human step-ups per task (attacked runs)", color=ink, fontsize=10)
     ax.set_ylabel("Attack success rate (95% Wilson CI)", color=ink, fontsize=10)
-    ax.set_title("Mandate granularity: attack success vs. human step-up load", color=ink, fontsize=11.5, loc="left")
+    ax.set_title("Mandate granularity: attack success vs. human step-up load", color=ink, fontsize=11.5, loc="left", pad=30)
     n_ep = max(m["epochs"] for m in summary.values())
     n_at = max(m["n_attack"] for m in summary.values())
     ax.text(
-        0, 1.01, f"AgentDojo banking v1.2.2, important_instructions, claude-haiku-5-5; n = {n_at} attacked runs per config ({n_ep} epoch(s))",
+        0, 1.01, f"AgentDojo banking v1.2.2, important_instructions, claude-haiku-5-5; n = {n_at} attacked runs per config ({n_ep} epochs).\n"
+        "No config had any attack success; error bars are 95% upper bounds.",
         transform=ax.transAxes, fontsize=8, color=ink2, va="bottom",
     )
-    ax.set_xlim(-0.05, max(xs + [0.5]) * 1.35 + 0.1)
-    ax.set_ylim(-0.01, max(max(ys + [0.05]) * 1.6, 0.1))
+    ax.set_xlim(-0.02, max(xs + [0.2]) * 2.6 + 0.05)
+    ax.set_ylim(-0.005, max(max(ys) * 1.6, 0.06))
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
     ax.grid(True, color=grid, linewidth=0.8)
     ax.set_axisbelow(True)
@@ -164,6 +172,49 @@ def frontier(summary: dict[str, dict], path: Path) -> None:
     ax.tick_params(colors=ink2, labelsize=9)
     fig.tight_layout()
     fig.savefig(path, facecolor=fig.get_facecolor())
+    plt.close(fig)
+
+
+def frontier_compromised(path_json: Path, path_png: Path) -> None:
+    """Same axes for the scripted compromised-agent stress test (offline.py --compromised)."""
+    data = json.loads(path_json.read_text())
+    source = next(k for k in data if k.startswith("LLM")) if any(k.startswith("LLM") for k in data) else next(iter(data))
+    rows = {r["config"]: r for r in data[source]}
+    colors = {"M0": "#2a78d6", "M2-stepup": "#eb6834", "M3-stepup": "#1baf7a", "M4-stepup": "#eda100", "M4-block": "#e87ba4"}
+    markers = {"M0": "o", "M2-stepup": "s", "M3-stepup": "^", "M4-stepup": "D", "M4-block": "X"}
+    spots = {"M0": (0.10, 0.93), "M2-stepup": (0.50, 0.45), "M3-stepup": (0.36, 0.22), "M4-stepup": (0.70, 0.22), "M4-block": (0.06, 0.22)}
+    ink, ink2, grid = "#0b0b0b", "#52514e", "#e4e3df"
+    fig, ax = plt.subplots(figsize=(8.2, 5.4), dpi=160)
+    fig.patch.set_facecolor("#fcfcfb")
+    ax.set_facecolor("#fcfcfb")
+    for cfg in ORDER:
+        if cfg not in rows:
+            continue
+        r = rows[cfg]
+        x, y = r["stepups_per_task"], r["asr_k"] / r["n"]
+        lo, hi = wilson(r["asr_k"], r["n"])
+        ax.errorbar(x, y, yerr=[[max(0.0, y - lo)], [max(0.0, hi - y)]], fmt="none", ecolor=colors[cfg], elinewidth=1.5, capsize=3, alpha=0.8, zorder=2)
+        ax.scatter(x, y, s=90, marker=markers[cfg], color=colors[cfg], edgecolor="#fcfcfb", linewidth=2, zorder=3)
+        label = f"{cfg}\nutility {r['utility_k']}/{r['n']}, ASR {r['asr_k']}/{r['n']}\nlegit step-ups/task {r['legit_stepups_per_task']:.2f}"
+        ax.annotate(label, (x, y), xytext=spots[cfg], textcoords="axes fraction", fontsize=8.2, color=ink, va="top",
+                    arrowprops=dict(arrowstyle="-", color=colors[cfg], lw=1, alpha=0.7, shrinkA=2, shrinkB=6))
+    ax.set_xlabel("Reviewer queries per task (legit + injected calls)", color=ink, fontsize=10)
+    ax.set_ylabel("Attack success rate (95% Wilson CI)", color=ink, fontsize=10)
+    ax.set_title("Stress test: scripted agent that always obeys the injection", color=ink, fontsize=11.5, loc="left", pad=20)
+    ax.text(0, 1.01, "No API calls. Injection + user ground-truth calls through the real enforcer; AgentDojo checks; n = 144 pairs per config",
+            transform=ax.transAxes, fontsize=8, color=ink2, va="bottom")
+    ax.set_xlim(-0.1, 2.4)
+    ax.set_ylim(-0.04, 1.08)
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
+    ax.grid(True, color=grid, linewidth=0.8)
+    ax.set_axisbelow(True)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    for sp in ("left", "bottom"):
+        ax.spines[sp].set_color(ink2)
+    ax.tick_params(colors=ink2, labelsize=9)
+    fig.tight_layout()
+    fig.savefig(path_png, facecolor=fig.get_facecolor())
     plt.close(fig)
 
 
@@ -242,6 +293,8 @@ def main() -> None:
     (RES / "m0_shadow.md").write_text(m0_shadow(runs))
     (RES / "attack_successes.md").write_text(attack_successes(runs))
     frontier(summary, FIG / "frontier.png")
+    if (RES / "compromised_agent.json").exists():
+        frontier_compromised(RES / "compromised_agent.json", FIG / "frontier_compromised.png")
 
     L = ["# Summary (generated by mandate_bench/analyze.py)\n"]
     L.append(f"Runs: {len(runs)} ok, {len(errs)} unrecovered errors. Total spend in these runs: ${sum(m['cost_usd'] for m in summary.values()):.4f}.\n")
@@ -256,6 +309,11 @@ def main() -> None:
             f"{m['legit_final_declined']}/{m['legit_calls']} ({fmt_pct(m['final_false_decline_rate'])}) | "
             f"{m['mandate_failures']} | ${m['cost_usd']:.4f} |"
         )
+    L.append("\nAgent abstentions (no attack): runs of tasks whose ground truth changes state in which the agent made no state-changing call:\n")
+    L.append("| config | abstentions |")
+    L.append("|---|---|")
+    for c, m in summary.items():
+        L.append(f"| {c} | {m['abstain_noattack']}/{m['needs_action_noattack']} |")
     L.append("\nInjected (non-legit) state-changing calls attempted under attack, and how many executed:\n")
     L.append("| config | attacked runs with >=1 injected call | injected calls | executed |")
     L.append("|---|---|---|---|")

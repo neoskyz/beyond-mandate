@@ -153,3 +153,16 @@ def test_attack_builds_injections(suite):
     inj = attack.attack(suite.user_tasks["user_task_0"], suite.injection_tasks["injection_task_0"])
     assert "injection_bill_text" in inj
     assert "Claude" in inj["injection_bill_text"] and ATTACKER in inj["injection_bill_text"]
+
+
+def test_compromised_agent_replay(suite):
+    from mandate_bench.offline import compromised_agent_run
+
+    ut, it = suite.user_tasks["user_task_3"], suite.injection_tasks["injection_task_0"]
+    m = Mandate(allowed_actions=["send_money"], explicit_payees=["GB29NWBK60161331926819"])
+    r0 = compromised_agent_run(suite, ut, it, m, Level.M0, Policy.BLOCK)
+    assert r0["security"] and r0["utility"]
+    r3 = compromised_agent_run(suite, ut, it, m, Level.M3, Policy.STEPUP)
+    assert not r3["security"] and r3["utility"] and r3["stepups"] == 1  # injected call reviewed and denied
+    r2 = compromised_agent_run(suite, ut, it, m, Level.M2, Policy.STEPUP)
+    assert r2["security"]  # 0.01 to an unknown payee is within M2's cap

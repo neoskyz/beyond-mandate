@@ -1,0 +1,106 @@
+{
+ "LLM mandates recorded in raw.jsonl": [
+  {
+   "config": "M0",
+   "n": 144,
+   "asr_k": 144,
+   "asr_first_k": 143,
+   "asr_last_k": 144,
+   "utility_k": 126,
+   "stepups_per_task": 0.0,
+   "legit_stepups_per_task": 0.0
+  },
+  {
+   "config": "M2-stepup",
+   "n": 144,
+   "asr_k": 39,
+   "asr_first_k": 38,
+   "asr_last_k": 39,
+   "utility_k": 138,
+   "stepups_per_task": 1.0763888888888888,
+   "legit_stepups_per_task": 0.125
+  },
+  {
+   "config": "M3-stepup",
+   "n": 144,
+   "asr_k": 1,
+   "asr_first_k": 0,
+   "asr_last_k": 1,
+   "utility_k": 144,
+   "stepups_per_task": 1.4027777777777777,
+   "legit_stepups_per_task": 0.1875
+  },
+  {
+   "config": "M4-stepup",
+   "n": 144,
+   "asr_k": 1,
+   "asr_first_k": 0,
+   "asr_last_k": 1,
+   "utility_k": 144,
+   "stepups_per_task": 1.6527777777777777,
+   "legit_stepups_per_task": 0.4375
+  },
+  {
+   "config": "M4-block",
+   "n": 144,
+   "asr_k": 1,
+   "asr_first_k": 0,
+   "asr_last_k": 1,
+   "utility_k": 99,
+   "stepups_per_task": 0.0,
+   "legit_stepups_per_task": 0.0
+  }
+ ],
+ "rule-based stub": [
+  {
+   "config": "M0",
+   "n": 144,
+   "asr_k": 144,
+   "asr_first_k": 143,
+   "asr_last_k": 144,
+   "utility_k": 126,
+   "stepups_per_task": 0.0,
+   "legit_stepups_per_task": 0.0
+  },
+  {
+   "config": "M2-stepup",
+   "n": 144,
+   "asr_k": 44,
+   "asr_first_k": 43,
+   "asr_last_k": 44,
+   "utility_k": 138,
+   "stepups_per_task": 1.0416666666666667,
+   "legit_stepups_per_task": 0.125
+  },
+  {
+   "config": "M3-stepup",
+   "n": 144,
+   "asr_k": 1,
+   "asr_first_k": 0,
+   "asr_last_k": 1,
+   "utility_k": 144,
+   "stepups_per_task": 1.4027777777777777,
+   "legit_stepups_per_task": 0.1875
+  },
+  {
+   "config": "M4-stepup",
+   "n": 144,
+   "asr_k": 1,
+   "asr_first_k": 0,
+   "asr_last_k": 1,
+   "utility_k": 144,
+   "stepups_per_task": 1.7152777777777777,
+   "legit_stepups_per_task": 0.5
+  },
+  {
+   "config": "M4-block",
+   "n": 144,
+   "asr_k": 1,
+   "asr_first_k": 0,
+   "asr_last_k": 1,
+   "utility_k": 90,
+   "stepups_per_task": 0.0,
+   "legit_stepups_per_task": 0.0
+  }
+ ]
+}
