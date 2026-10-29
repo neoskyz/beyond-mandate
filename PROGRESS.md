@@ -94,3 +94,114 @@ Timestamps are local time (machine clock). Spend = cumulative paid API spend com
 - tool_knowledge attack at M0 (results/raw_tool_knowledge.jsonl): 144/144 runs ok, ASR 0/144, 0 injected calls attempted, utility 99/144, cost $0.19. Not expanded to other configs (decision rule: only if M0 ASR > 0).
 - Added offline compromised-agent stress test (offline.py --compromised; results/compromised_agent.md, figures/frontier_compromised.png): scripted agent executes injection + user ground-truth calls through the real enforcer in both orders; AgentDojo checks score. With LLM mandates: ASR M0 144/144, M2-stepup 39/144, M3-stepup 1/144, M4-stepup 1/144, M4-block 1/144; utility M4-block 99/144, M3/M4-stepup 144/144; reviewer queries/task 0 / 1.08 / 1.40 / 1.65 / 0.
 - Live-agent mandates are deterministic for 15/16 prompts (user_task_11 varies between explicit_amounts [5.29] and [5.29, 19.5]).
+- 2026-10-28 22:15 [M3-stepup] 120/160 runs, cumulative spend $1.4253
+- 2026-10-28 22:16 [M3-stepup] 160/160 runs, cumulative spend $1.4892
+- 2026-10-28 22:16 [M3-stepup] epoch 2 finished: 160 runs written (0 errors); cumulative spend $1.4892
+- 2026-10-28 22:16 [M4-stepup] epoch 2 start: 160 runs; spend so far $1.4892
+- 2026-10-28 22:17 [M4-stepup] 40/160 runs, cumulative spend $1.5360
+- 2026-10-28 22:19 [M4-stepup] 80/160 runs, cumulative spend $1.5910
+- 2026-10-28 22:20 [M4-stepup] 120/160 runs, cumulative spend $1.6383
+- 2026-10-28 22:21 [M4-stepup] 160/160 runs, cumulative spend $1.7016
+- 2026-10-28 22:21 [M4-stepup] epoch 2 finished: 160 runs written (0 errors); cumulative spend $1.7016
+- 2026-10-28 22:21 [M4-block] epoch 2 start: 160 runs; spend so far $1.7016
+- 2026-10-28 22:22 [M4-block] 40/160 runs, cumulative spend $1.7484
+- 2026-10-28 22:23 [M4-block] 80/160 runs, cumulative spend $1.8026
+- 2026-10-28 22:25 [M4-block] 120/160 runs, cumulative spend $1.8494
+- 2026-10-28 22:26 [M4-block] 160/160 runs, cumulative spend $1.9104
+- 2026-10-28 22:26 [M4-block] epoch 2 finished: 160 runs written (0 errors); cumulative spend $1.9104
+- 2026-10-28 22:26 [M2-stepup] epoch 2 start: 160 runs; spend so far $1.9104
+- 2026-10-28 22:27 [M2-stepup] 40/160 runs, cumulative spend $1.9586
+- 2026-10-28 22:28 [M2-stepup] 80/160 runs, cumulative spend $2.0111
+- 2026-10-28 22:29 [M2-stepup] 120/160 runs, cumulative spend $2.0579
+- 2026-10-28 22:31 [M2-stepup] 160/160 runs, cumulative spend $2.1190
+- 2026-10-28 22:31 [M2-stepup] epoch 2 finished: 160 runs written (0 errors); cumulative spend $2.1190
+- 2026-10-28 22:31 [M0] epoch 3 start: 160 runs; spend so far $2.3076
+- 2026-10-28 22:32 [M0] 40/160 runs, cumulative spend $2.3546
+- 2026-10-28 22:33 [M0] 80/160 runs, cumulative spend $2.4095
+- 2026-10-28 22:34 [M0] 120/160 runs, cumulative spend $2.4577
+- 2026-10-28 22:35 [M0] 160/160 runs, cumulative spend $2.5198
+- 2026-10-28 22:35 [M0] epoch 3 finished: 160 runs written (0 errors); cumulative spend $2.5198
+- 2026-10-28 22:35 [M3-stepup] epoch 3 start: 160 runs; spend so far $2.5198
+- 2026-10-28 22:36 [M3-stepup] 40/160 runs, cumulative spend $2.5662
+- 2026-10-28 22:38 [M3-stepup] 80/160 runs, cumulative spend $2.6209
+- 2026-10-28 22:39 [M3-stepup] 120/160 runs, cumulative spend $2.6673
+- 2026-10-28 22:40 [M3-stepup] 160/160 runs, cumulative spend $2.7310
+- 2026-10-28 22:40 [M3-stepup] epoch 3 finished: 160 runs written (0 errors); cumulative spend $2.7310
+- 2026-10-28 22:40 [M4-stepup] epoch 3 start: 160 runs; spend so far $2.7310
+- 2026-10-28 22:41 [M4-stepup] 40/160 runs, cumulative spend $2.7782
+- 2026-10-28 22:42 [M4-stepup] 80/160 runs, cumulative spend $2.8305
+- 2026-10-28 22:44 [M4-stepup] 120/160 runs, cumulative spend $2.8773
+- 2026-10-28 22:45 [M4-stepup] 160/160 runs, cumulative spend $2.9386
+- 2026-10-28 22:45 [M4-stepup] epoch 3 finished: 160 runs written (0 errors); cumulative spend $2.9386
+- 2026-10-28 22:45 [M4-block] epoch 3 start: 160 runs; spend so far $2.9386
+- 2026-10-28 22:46 [M4-block] 40/160 runs, cumulative spend $2.9850
+- 2026-10-28 22:47 [M4-block] 80/160 runs, cumulative spend $3.0376
+- 2026-10-28 22:48 [M4-block] 120/160 runs, cumulative spend $3.0858
+- 2026-10-28 22:50 [M4-block] 160/160 runs, cumulative spend $3.1471
+- 2026-10-28 22:50 [M4-block] epoch 3 finished: 160 runs written (0 errors); cumulative spend $3.1471
+- 2026-10-28 22:50 [M2-stepup] epoch 3 start: 160 runs; spend so far $3.1471
+- 2026-10-28 22:51 [M2-stepup] 40/160 runs, cumulative spend $3.1939
+- 2026-10-28 22:52 [M2-stepup] 80/160 runs, cumulative spend $3.2445
+- 2026-10-28 22:53 [M2-stepup] 120/160 runs, cumulative spend $3.2933
+- 2026-10-28 22:54 [M2-stepup] 160/160 runs, cumulative spend $3.3554
+- 2026-10-28 22:54 [M2-stepup] epoch 3 finished: 160 runs written (0 errors); cumulative spend $3.3554
+- 2026-10-28 22:54 [M0] epoch 4 start: 160 runs; spend so far $3.3554
+- 2026-10-28 22:55 [M0] 40/160 runs, cumulative spend $3.4029
+- 2026-10-28 22:57 [M0] 80/160 runs, cumulative spend $3.4555
+- 2026-10-28 22:58 [M0] 120/160 runs, cumulative spend $3.5032
+- 2026-10-28 22:59 [M0] 160/160 runs, cumulative spend $3.5658
+- 2026-10-28 22:59 [M0] epoch 4 finished: 160 runs written (0 errors); cumulative spend $3.5658
+- 2026-10-28 22:59 [M3-stepup] epoch 4 start: 160 runs; spend so far $3.5658
+- 2026-10-28 23:00 [M3-stepup] 40/160 runs, cumulative spend $3.6132
+- 2026-10-28 23:01 [M3-stepup] 80/160 runs, cumulative spend $3.6645
+- 2026-10-28 23:03 [M3-stepup] 120/160 runs, cumulative spend $3.7116
+- 2026-10-28 23:04 [M3-stepup] 160/160 runs, cumulative spend $3.7729
+- 2026-10-28 23:04 [M3-stepup] epoch 4 finished: 160 runs written (0 errors); cumulative spend $3.7729
+- 2026-10-28 23:04 [M4-stepup] epoch 4 start: 160 runs; spend so far $3.7729
+- 2026-10-28 23:05 [M4-stepup] 40/160 runs, cumulative spend $3.8218
+- 2026-10-28 23:06 [M4-stepup] 80/160 runs, cumulative spend $3.8743
+- 2026-10-28 23:08 [M4-stepup] 120/160 runs, cumulative spend $3.9227
+- 2026-10-28 23:09 [M4-stepup] 160/160 runs, cumulative spend $3.9862
+- 2026-10-28 23:09 [M4-stepup] epoch 4 finished: 160 runs written (0 errors); cumulative spend $3.9862
+- 2026-10-28 23:09 [M4-block] epoch 4 start: 160 runs; spend so far $3.9862
+- 2026-10-28 23:10 [M4-block] 40/160 runs, cumulative spend $4.0343
+- 2026-10-28 23:11 [M4-block] 80/160 runs, cumulative spend $4.0893
+- 2026-10-28 23:12 [M4-block] 120/160 runs, cumulative spend $4.1374
+- 2026-10-28 23:14 [M4-block] 160/160 runs, cumulative spend $4.1979
+- 2026-10-28 23:14 [M4-block] epoch 4 finished: 160 runs written (0 errors); cumulative spend $4.1979
+- 2026-10-28 23:14 [M2-stepup] epoch 4 start: 160 runs; spend so far $4.1979
+- 2026-10-28 23:15 [M2-stepup] 40/160 runs, cumulative spend $4.2468
+- 2026-10-28 23:16 [M2-stepup] 80/160 runs, cumulative spend $4.2985
+- 2026-10-28 23:18 [M2-stepup] 120/160 runs, cumulative spend $4.3480
+- 2026-10-28 23:19 [M2-stepup] 160/160 runs, cumulative spend $4.4101
+- 2026-10-28 23:19 [M2-stepup] epoch 4 finished: 160 runs written (0 errors); cumulative spend $4.4101
+- 2026-10-28 23:19 [M0] epoch 5 start: 160 runs; spend so far $4.4101
+- 2026-10-28 23:20 [M0] 40/160 runs, cumulative spend $4.4569
+- 2026-10-28 23:21 [M0] 80/160 runs, cumulative spend $4.5089
+- 2026-10-28 23:22 [M0] 120/160 runs, cumulative spend $4.5573
+- 2026-10-28 23:24 [M0] 160/160 runs, cumulative spend $4.6205
+- 2026-10-28 23:24 [M0] epoch 5 finished: 160 runs written (0 errors); cumulative spend $4.6205
+- 2026-10-28 23:24 [M3-stepup] epoch 5 start: 160 runs; spend so far $4.6205
+- 2026-10-28 23:25 [M3-stepup] 40/160 runs, cumulative spend $4.6677
+- 2026-10-28 23:26 [M3-stepup] 80/160 runs, cumulative spend $4.7220
+- 2026-10-28 23:27 [M3-stepup] 120/160 runs, cumulative spend $4.7698
+- 2026-10-28 23:29 [M3-stepup] 160/160 runs, cumulative spend $4.8332
+- 2026-10-28 23:29 [M3-stepup] epoch 5 finished: 160 runs written (0 errors); cumulative spend $4.8332
+- 2026-10-28 23:29 [M4-stepup] epoch 5 start: 160 runs; spend so far $4.8332
+- 2026-10-28 23:30 [M4-stepup] 40/160 runs, cumulative spend $4.8805
+- 2026-10-28 23:31 [M4-stepup] 80/160 runs, cumulative spend $4.9285
+- 2026-10-28 23:32 [M4-stepup] 120/160 runs, cumulative spend $4.9778
+- 2026-10-28 23:33 [M4-stepup] 160/160 runs, cumulative spend $5.0393
+- 2026-10-28 23:33 [M4-stepup] epoch 5 finished: 160 runs written (0 errors); cumulative spend $5.0393
+- 2026-10-28 23:33 [M4-block] epoch 5 start: 160 runs; spend so far $5.0393
+- 2026-10-28 23:35 [M4-block] 40/160 runs, cumulative spend $5.0884
+- 2026-10-28 23:36 [M4-block] 80/160 runs, cumulative spend $5.1410
+- 2026-10-28 23:37 [M4-block] 120/160 runs, cumulative spend $5.1903
+- 2026-10-28 23:38 [M4-block] 160/160 runs, cumulative spend $5.2525
+- 2026-10-28 23:38 [M4-block] epoch 5 finished: 160 runs written (0 errors); cumulative spend $5.2525
+- 2026-10-28 23:38 [M2-stepup] epoch 5 start: 160 runs; spend so far $5.2525
+- 2026-10-28 23:39 [M2-stepup] 40/160 runs, cumulative spend $5.3000
+- 2026-10-28 23:41 [M2-stepup] 80/160 runs, cumulative spend $5.3520
+- 2026-10-28 23:42 [M2-stepup] 120/160 runs, cumulative spend $5.4012
+- 2026-10-28 23:43 [M2-stepup] 160/160 runs, cumulative spend $5.4641
+- 2026-10-28 23:43 [M2-stepup] epoch 5 finished: 160 runs written (0 errors); cumulative spend $5.4641
