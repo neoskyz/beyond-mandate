@@ -239,7 +239,7 @@ results/summary*.csv|md, per_*_task.csv, agent_behavior.md, m0_shadow.md, attack
 results/offline_table*.md|json, compromised_agent.md|json
 results/traces/epoch{N}/{config}/{user_task}__{injection_task|none}.json   full message traces
 figures/frontier.png, figures/frontier_compromised.png
-PROGRESS_haiku.md                   timestamped log with cumulative spend
+writeup/PROGRESS_haiku.md           timestamped log with cumulative spend
 third_party/agentdojo/        (gitignored) pinned AgentDojo checkout
 ```
 

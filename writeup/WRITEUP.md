@@ -199,6 +199,6 @@ for e in 1 2 3 4 5; do .venv/bin/python -m mandate_bench.run --epoch $e --worker
 Cost: $5.25 for the 4,000-run grid and $5.46 in total, including the pilot, smoke and
 `tool_knowledge` runs. Runtime: about 25 minutes per epoch with 4 workers, about 2 hours for all
 five. The offline analyses take seconds. Full commands, deviations and the repo map are in
-[RESULTS_haiku.md](../RESULTS_haiku.md).
+[RESULTS_haiku.md](RESULTS_haiku.md).
 
 Code and first draft of this write-up produced with assistance from Claude Code; reviewed and edited by the author.

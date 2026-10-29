@@ -157,6 +157,6 @@ for e in 1 2 3 4 5; do .venv/bin/python -m mandate_bench.openai_run --epoch $e -
 This run cost $3.64 ($3.6421 for 4,000 grid runs plus $0.0015 for smoke). Cumulative spend across both
 runs is $9.11. Runtime was about 1 hour for the grid at 8 workers (07:23–08:23, `PROGRESS_gpt4omini.md`).
 The run needs the first run's `results/raw.jsonl` for the mandates. Full details are in
-[RESULTS_gpt4omini.md](../RESULTS_gpt4omini.md).
+[RESULTS_gpt4omini.md](RESULTS_gpt4omini.md).
 
 Code and first draft of this write-up produced with assistance from Claude Code; reviewed and edited by the author.

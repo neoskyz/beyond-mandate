@@ -226,7 +226,7 @@ for e in 1 2 3 4 5; do .venv/bin/python -m mandate_bench.openai_run --epoch $e -
 - gpt-4o-mini grid: about 12 minutes per epoch at 8 workers (07:23–08:23 on 2026-10-29).
 - The offline analyses take seconds.
 
-Full details are in [RESULTS_combined.md](../RESULTS_combined.md), [RESULTS_haiku.md](../RESULTS_haiku.md) and
-[RESULTS_gpt4omini.md](../RESULTS_gpt4omini.md).
+Full details are in [RESULTS_combined.md](RESULTS_combined.md), [RESULTS_haiku.md](RESULTS_haiku.md) and
+[RESULTS_gpt4omini.md](RESULTS_gpt4omini.md).
 
 Code and first draft of this write-up produced with assistance from Claude Code; reviewed and edited by the author.

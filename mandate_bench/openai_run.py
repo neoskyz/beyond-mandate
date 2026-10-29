@@ -56,7 +56,7 @@ OUT = RESULTS / "gpt4omini"
 RAW = OUT / "raw.jsonl"
 SMOKE = OUT / "smoke.jsonl"
 TRACES = OUT / "traces"
-PROGRESS = ROOT / "PROGRESS_gpt4omini.md"
+PROGRESS = ROOT / "writeup" / "PROGRESS_gpt4omini.md"
 RUN_CAP_USD = 50.0  # cap on this run's own spend (results/gpt4omini/*.jsonl); the global stop also applies
 
 # USD per million tokens, gpt-4o-mini, from developers.openai.com/api/docs/pricing (fetched 2026-10-29).

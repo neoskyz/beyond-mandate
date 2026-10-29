@@ -239,7 +239,7 @@ Combined outputs:
 mandate_bench/analyze_combined.py    side-by-side table, attacker-directed calls, combined figure
 results/combined_summary.md          side-by-side tables for both agents
 figures/combined/frontier.png        both agents, two facets, shared axes
-RESULTS_combined.md, writeup/WRITEUP_combined.md
+writeup/RESULTS_combined.md, writeup/WRITEUP_combined.md
 ```
 
 ## 9. Open issues and next steps

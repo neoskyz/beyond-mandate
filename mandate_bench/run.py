@@ -38,7 +38,7 @@ RESULTS = ROOT / "results"
 RAW = RESULTS / "raw.jsonl"
 SMOKE = RESULTS / "smoke.jsonl"
 TRACES = RESULTS / "traces"
-PROGRESS = ROOT / "PROGRESS_haiku.md"
+PROGRESS = ROOT / "writeup" / "PROGRESS_haiku.md"
 
 SUITE_VERSION = "v1.2.2"
 SUITE_NAME = "banking"

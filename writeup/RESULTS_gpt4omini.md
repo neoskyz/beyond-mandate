@@ -225,8 +225,8 @@ results/gpt4omini/traces/epoch{N}/{config}/{user_task}__{injection_task|none}.js
 results/gpt4omini/run_pilot.log, run_epochs1-5.log
 results/combined_summary.md
 figures/gpt4omini/frontier.png, figures/combined/frontier.png
-PROGRESS_gpt4omini.md
-RESULTS_gpt4omini.md, writeup/WRITEUP_gpt4omini.md, RESULTS_combined.md, writeup/WRITEUP_combined.md
+writeup/PROGRESS_gpt4omini.md
+writeup/RESULTS_gpt4omini.md, writeup/WRITEUP_gpt4omini.md, writeup/RESULTS_combined.md, writeup/WRITEUP_combined.md
 ```
 
 ## 9. Open issues and next steps

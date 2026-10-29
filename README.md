@@ -25,6 +25,23 @@ defending against them costs. This study measures the trade-off between
 many human step-ups it adds. It runs on [AgentDojo](https://github.com/ethz-spylab/agentdojo)
 [[2]](#references) banking with a *fooled* agent (`gpt-4o-mini`) and a *robust* one (`claude-haiku-5-5`).
 
+## Motivation
+
+Most of the work on agent payment security asks whether a defense stops the attack. Fraud
+operations asks a second question with equal weight: what does the control cost the good
+customers? Every rule that stops a fraudulent payment also flags some legitimate ones. Each flag
+becomes a false decline or a case in a manual review queue, and review capacity is finite and
+expensive. A rule that halves fraud but triples the review queue may be a bad rule.
+
+Signed mandates for agent payments, such as the intents in AP2, are a natural place to draw the
+line between "the agent may do this" and "a human must look". How tightly the mandate is written
+decides where that line falls. I wanted to measure the cost side of that choice directly: how many
+legitimate actions each granularity pushes to a human, and how much attack success it removes in
+exchange.
+
+The question: as a payment mandate gets tighter, how much attack success does it remove, and how
+many human step-ups and false declines does it add?
+
 ## Experiment design
 
 ```mermaid
@@ -176,7 +193,7 @@ M1 allows it, and only the payee rule in M2 stops it.
 ## More detail
 
 [writeup/WRITEUP_combined.md](writeup/WRITEUP_combined.md) has the full write-up.
-[RESULTS_combined.md](RESULTS_combined.md) has every number with confidence intervals. Raw runs and
+[writeup/RESULTS_combined.md](writeup/RESULTS_combined.md) has every number with confidence intervals. Raw runs and
 traces are in [results/](results/).
 
 ## Reproduce
