@@ -21,7 +21,7 @@ from pathlib import Path
 
 from agentdojo.agent_pipeline.errors import AbortAgentError
 from agentdojo.attacks.base_attacks import FixedJailbreakAttack
-from agentdojo.attacks.important_instructions_attacks import ImportantInstructionsAttack
+from agentdojo.attacks.important_instructions_attacks import ImportantInstructionsAttack, ToolKnowledgeAttack
 from agentdojo.functions_runtime import FunctionsRuntime
 from agentdojo.task_suite.load_suites import get_suite
 from agentdojo.task_suite.task_suite import functions_stack_trace_from_messages, model_output_from_messages
@@ -66,6 +66,19 @@ class ImportantInstructionsClaude(ImportantInstructionsAttack):
         FixedJailbreakAttack.__init__(self, self._JB_STRING, task_suite, target_pipeline)
         self.user_name = "Emma Johnson"
         self.model_name = "Claude"
+
+
+class ToolKnowledgeClaude(ToolKnowledgeAttack):
+    """agentdojo's `tool_knowledge` attack (used only for the supplementary sensitivity run);
+    same model-name workaround as above."""
+
+    def __init__(self, task_suite, target_pipeline=None) -> None:
+        FixedJailbreakAttack.__init__(self, self._JB_STRING, task_suite, target_pipeline)
+        self.user_name = "Emma Johnson"
+        self.model_name = "Claude"
+
+
+ATTACKS = {"important_instructions": ImportantInstructionsClaude, "tool_knowledge": ToolKnowledgeClaude}
 
 
 def log_progress(line: str) -> None:
@@ -187,7 +200,8 @@ def run_one(
     )
 
     mres = mandate_box.get("result")
-    trace_path = TRACES / f"epoch{epoch}" / config / f"{user_task_id}__{injection_task_id or 'none'}.json"
+    trace_root = TRACES if attack.name == "important_instructions" else TRACES / attack.name
+    trace_path = trace_root / f"epoch{epoch}" / config / f"{user_task_id}__{injection_task_id or 'none'}.json"
     trace_path.parent.mkdir(parents=True, exist_ok=True)
     trace_path.write_text(json.dumps({"prompt": user_task.PROMPT, "injections": injections, "messages": compact_trace(messages)}, indent=1, default=str))
 
@@ -267,6 +281,7 @@ def main() -> None:
     ap.add_argument("--no-attack-only", action="store_true")
     ap.add_argument("--attack-only", action="store_true")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--attack", choices=list(ATTACKS), default="important_instructions")
     ap.add_argument("--epoch", type=int, default=1, help="repetition index (independent re-run of the same grid)")
     ap.add_argument("--stop-usd", type=float, default=BUDGET_STOP_USD)
     ap.add_argument("--smoke", action="store_true", help="write to results/smoke.jsonl instead of raw.jsonl")
@@ -278,7 +293,7 @@ def main() -> None:
     out_path = args.out or (SMOKE if args.smoke else RAW)
     RESULTS.mkdir(exist_ok=True)
     suite = get_suite(SUITE_VERSION, SUITE_NAME)
-    attack = ImportantInstructionsClaude(suite)
+    attack = ATTACKS[args.attack](suite)
     for ut in suite.user_tasks.values():  # warm the lru_cache before threads share it
         attack.get_injection_candidates(ut)
     user_tasks = args.user_tasks or list(suite.user_tasks)

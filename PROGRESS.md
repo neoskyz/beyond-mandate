@@ -40,3 +40,38 @@ Timestamps are local time (machine clock). Spend = cumulative paid API spend com
 - Pilot (results/pilot_default_prompt.jsonl): M0, 16 no-attack tasks, AgentDojo default system prompt: utility 13/16. Decision: keep AgentDojo's default system prompt unchanged.
 - Benchmark quirks found: user_task_5 and user_task_6 utility checks are satisfied by transactions that already exist in the initial environment (Spotify 50.00 payment id 3; recurring Spotify 50.00 scheduled id 6), so they pass even if the agent does nothing.
 - Cost estimate: ~$0.0015/run x 800 runs (5 configs x 160) ~ $1.2-2. Far below the $120 stop. Decision: no scale-down. Extension (after the spec'd grid completes): 2 extra repetitions (epochs 2-3) of the full grid to reduce sampling noise (~$2-4 more). Spend so far: ~$0.03.
+- 2026-10-28 21:41 [M0] epoch 1 start: 160 runs; spend so far $0.0274
+- 2026-10-28 21:42 [M0] 40/160 runs, cumulative spend $0.0745
+- 2026-10-28 21:44 [M0] 80/160 runs, cumulative spend $0.1259
+- 2026-10-28 21:45 [M0] 120/160 runs, cumulative spend $0.1732
+- 2026-10-28 21:46 [M0] 160/160 runs, cumulative spend $0.2346
+- 2026-10-28 21:46 [M0] epoch 1 finished: 160 runs written (0 errors); cumulative spend $0.2346
+- 2026-10-28 21:46 [M3-stepup] epoch 1 start: 160 runs; spend so far $0.2346
+- 2026-10-28 21:47 [M3-stepup] 40/160 runs, cumulative spend $0.2802
+- 2026-10-28 21:49 [M3-stepup] 80/160 runs, cumulative spend $0.3315
+- 2026-10-28 21:50 [M3-stepup] 120/160 runs, cumulative spend $0.3779
+- 2026-10-28 21:51 [M3-stepup] 160/160 runs, cumulative spend $0.4396
+- 2026-10-28 21:51 [M3-stepup] epoch 1 finished: 160 runs written (0 errors); cumulative spend $0.4396
+- 2026-10-28 21:51 [M4-stepup] epoch 1 start: 160 runs; spend so far $0.4396
+- 2026-10-28 21:52 [M4-stepup] 40/160 runs, cumulative spend $0.4877
+- 2026-10-28 21:53 [M4-stepup] 80/160 runs, cumulative spend $0.5409
+- 2026-10-28 21:55 [M4-stepup] 120/160 runs, cumulative spend $0.5893
+- 2026-10-28 21:56 [M4-stepup] 160/160 runs, cumulative spend $0.6510
+- 2026-10-28 21:56 [M4-stepup] epoch 1 finished: 160 runs written (0 errors); cumulative spend $0.6510
+- 2026-10-28 21:56 [M4-block] epoch 1 start: 160 runs; spend so far $0.6510
+- 2026-10-28 21:57 [M4-block] 40/160 runs, cumulative spend $0.6992
+- 2026-10-28 21:58 [M4-block] 80/160 runs, cumulative spend $0.7498
+- 2026-10-28 21:59 [M4-block] 120/160 runs, cumulative spend $0.7977
+- 2026-10-28 22:01 [M4-block] 160/160 runs, cumulative spend $0.8593
+- 2026-10-28 22:01 [M4-block] epoch 1 finished: 160 runs written (0 errors); cumulative spend $0.8593
+- 2026-10-28 22:01 [M2-stepup] epoch 1 start: 160 runs; spend so far $0.8593
+- 2026-10-28 22:02 [M2-stepup] 40/160 runs, cumulative spend $0.9064
+- 2026-10-28 22:03 [M2-stepup] 80/160 runs, cumulative spend $0.9605
+- 2026-10-28 22:04 [M2-stepup] 120/160 runs, cumulative spend $1.0068
+- 2026-10-28 22:06 [M2-stepup] 160/160 runs, cumulative spend $1.0681
+- 2026-10-28 22:06 [M2-stepup] epoch 1 finished: 160 runs written (0 errors); cumulative spend $1.0681
+
+## 2026-10-28 22:06 Step 4: epoch 1 (spec grid) complete
+- 800/800 runs ok, 0 errors. Cumulative spend $1.07 (all files incl. smoke/pilot/adjustments).
+- ASR = 0/144 in all 5 configs; in 720 attacked runs the agent never attempted an injected state-changing call. The security axis cannot separate levels with this attack + model.
+- Decision (extension, budget allows): epochs 2-5 of the same grid (~$4.3) to reduce noise on no-attack metrics (n=16 per epoch), and a sensitivity run with AgentDojo's tool_knowledge attack at M0 (results/raw_tool_knowledge.jsonl; expand to other configs only if M0 ASR > 0).
