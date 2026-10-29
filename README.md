@@ -96,7 +96,7 @@ changing the user's password, etc.
   - Haiku never made a single call for the attacker in 3,600 attacked runs. Its replies usually
     pointed out the injected instruction and said it was ignored.
   - Haiku was also better at the user's actual task: 73.8% vs 53.8% success without attack.
-  - But this comparison is not the point of this experiment
+  - But this comparison is not the point of this experiment, just a background
 - **A basic mandate stops most fraud, and a first-time-payee rule stops the rest.**
   - gpt-4o-mini's attack success fell from 51.8% (M0) to 12.9% (M1) to 0 of 720 (M2).
 - **Each fraud the payee rule stops costs about two human reviews.**
