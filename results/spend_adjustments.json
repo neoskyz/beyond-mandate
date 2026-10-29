@@ -1,0 +1,4 @@
+{"note": "Paid API spend not captured in raw.jsonl/smoke.jsonl records (counted in budget).", "entries": [
+  {"usd": 0.00001, "what": "model-ID check call (12 in / 4 out tokens)"},
+  {"usd": 0.0009, "what": "first smoke attempt, 4 mandate calls before the converter crash (reported total $0.0009)"}
+]}

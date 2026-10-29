@@ -103,8 +103,13 @@ class SpendTracker:
             return self.spent >= self.stop_usd
 
 
+ADJUSTMENTS = RESULTS / "spend_adjustments.json"
+
+
 def total_recorded_spend() -> float:
-    return sum(r.get("cost_usd_all_attempts", r.get("cost_usd", 0.0)) for p in (RAW, SMOKE) for r in read_records(p))
+    recorded = sum(r.get("cost_usd_all_attempts", r.get("cost_usd", 0.0)) for p in sorted(RESULTS.glob("*.jsonl")) for r in read_records(p))
+    extra = sum(e["usd"] for e in json.loads(ADJUSTMENTS.read_text())["entries"]) if ADJUSTMENTS.exists() else 0.0
+    return recorded + extra
 
 
 def compact_trace(messages) -> list[dict]:
@@ -125,7 +130,9 @@ def compact_trace(messages) -> list[dict]:
     return out
 
 
-def run_one(config: str, user_task_id: str, injection_task_id: str | None, suite, attack, meter: UsageMeter) -> dict:
+def run_one(
+    config: str, user_task_id: str, injection_task_id: str | None, suite, attack, meter: UsageMeter, epoch: int = 1
+) -> dict:
     level, policy = CONFIGS[config]
     user_task = suite.get_user_task_by_id(user_task_id)
     injection_task = suite.get_injection_task_by_id(injection_task_id) if injection_task_id else None
@@ -180,13 +187,14 @@ def run_one(config: str, user_task_id: str, injection_task_id: str | None, suite
     )
 
     mres = mandate_box.get("result")
-    trace_path = TRACES / config / f"{user_task_id}__{injection_task_id or 'none'}.json"
+    trace_path = TRACES / f"epoch{epoch}" / config / f"{user_task_id}__{injection_task_id or 'none'}.json"
     trace_path.parent.mkdir(parents=True, exist_ok=True)
     trace_path.write_text(json.dumps({"prompt": user_task.PROMPT, "injections": injections, "messages": compact_trace(messages)}, indent=1, default=str))
 
     stepups = [e for e in events if e["action"].startswith("stepup")]
     return {
         "config": config,
+        "epoch": epoch,
         "level": level.value,
         "policy": policy.value,
         "user_task": user_task_id,
@@ -220,13 +228,13 @@ def run_one(config: str, user_task_id: str, injection_task_id: str | None, suite
     }
 
 
-def run_with_retries(config, ut, it, suite, attack, spend: SpendTracker) -> dict:
+def run_with_retries(config, ut, it, suite, attack, spend: SpendTracker, epoch: int) -> dict:
     failed_cost = 0.0
     errors = []
     for attempt in range(1 + MAX_RUN_RETRIES):
         meter = UsageMeter()
         try:
-            rec = run_one(config, ut, it, suite, attack, meter)
+            rec = run_one(config, ut, it, suite, attack, meter, epoch)
             rec["run_attempts"] = attempt + 1
             rec["errors"] = errors
             rec["cost_usd_all_attempts"] = round(rec["cost_usd"] + failed_cost, 6)
@@ -240,6 +248,7 @@ def run_with_retries(config, ut, it, suite, attack, spend: SpendTracker) -> dict
             time.sleep(5 * (attempt + 1))
     return {
         "config": config,
+        "epoch": epoch,
         "user_task": ut,
         "injection_task": it or "",
         "status": "error",
@@ -258,13 +267,15 @@ def main() -> None:
     ap.add_argument("--no-attack-only", action="store_true")
     ap.add_argument("--attack-only", action="store_true")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--epoch", type=int, default=1, help="repetition index (independent re-run of the same grid)")
     ap.add_argument("--stop-usd", type=float, default=BUDGET_STOP_USD)
     ap.add_argument("--smoke", action="store_true", help="write to results/smoke.jsonl instead of raw.jsonl")
+    ap.add_argument("--out", type=Path, default=None, help="override output jsonl")
     args = ap.parse_args()
     if args.stop_usd > BUDGET_HARD_USD:
         raise SystemExit("stop-usd above hard budget")
 
-    out_path = SMOKE if args.smoke else RAW
+    out_path = args.out or (SMOKE if args.smoke else RAW)
     RESULTS.mkdir(exist_ok=True)
     suite = get_suite(SUITE_VERSION, SUITE_NAME)
     attack = ImportantInstructionsClaude(suite)
@@ -273,7 +284,11 @@ def main() -> None:
     user_tasks = args.user_tasks or list(suite.user_tasks)
     injection_tasks = args.injection_tasks or list(suite.injection_tasks)
 
-    done = {(r["config"], r["user_task"], r["injection_task"]) for r in read_records(out_path) if r.get("status") == "ok"}
+    done = {
+        (r["config"], r["user_task"], r["injection_task"])
+        for r in read_records(out_path)
+        if r.get("status") == "ok" and r.get("epoch", 1) == args.epoch
+    }
     spend = SpendTracker(total_recorded_spend(), args.stop_usd)
     print(f"recorded spend so far: ${spend.spent:.4f}; stop at ${args.stop_usd}")
     write_lock = threading.Lock()
@@ -291,13 +306,13 @@ def main() -> None:
         if spend.exhausted():
             log_progress(f"[{config}] SKIPPED: spend ${spend.spent:.2f} >= stop ${args.stop_usd}")
             break
-        log_progress(f"[{config}] start: {len(jobs)} runs; spend so far ${spend.spent:.4f}")
+        log_progress(f"[{config}] epoch {args.epoch} start: {len(jobs)} runs; spend so far ${spend.spent:.4f}")
         n_done = n_err = 0
 
         def work(job):
             if spend.exhausted():
                 return None
-            return run_with_retries(config, job[0], job[1], suite, attack, spend)
+            return run_with_retries(config, job[0], job[1], suite, attack, spend, args.epoch)
 
         with ThreadPoolExecutor(max_workers=args.workers) as pool:
             futures = [pool.submit(work, j) for j in jobs]
@@ -317,7 +332,7 @@ def main() -> None:
                 )
                 if n_done % 40 == 0:
                     log_progress(f"[{config}] {n_done}/{len(jobs)} runs, cumulative spend ${spend.spent:.4f}")
-        log_progress(f"[{config}] finished: {n_done} runs written ({n_err} errors); cumulative spend ${spend.spent:.4f}")
+        log_progress(f"[{config}] epoch {args.epoch} finished: {n_done} runs written ({n_err} errors); cumulative spend ${spend.spent:.4f}")
         if spend.exhausted():
             log_progress(f"Budget stop reached (${spend.spent:.2f} >= ${args.stop_usd}); stopping paid runs.")
             break

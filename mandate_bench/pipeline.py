@@ -3,8 +3,12 @@
 We build the AgentDojo pipeline by hand instead of PipelineConfig.from_config, because
 agentdojo's model list predates claude-haiku-5-5 and its AnthropicLLM passes `temperature`,
 which the installed anthropic SDK (2.3.0) no longer accepts and Haiku 5.5 rejects.
-Message conversion reuses agentdojo's own helpers so the agent sees exactly what the stock
-AgentDojo Anthropic pipeline would send.
+agentdojo's message-conversion helpers also break on this SDK (MessageParam is no longer
+callable), so the conversion below re-implements agentdojo's mapping with plain dicts: same
+system prompt, same tool schemas, tool errors sent as is_error tool results, consecutive
+user/tool messages merged. Each assistant turn is replayed with the exact content blocks the
+API returned (kept under the extra key "_raw_content"), so thinking blocks are passed back
+unchanged, as Haiku 5.5 requires.
 """
 
 import random
@@ -17,13 +21,15 @@ import anthropic
 from agentdojo.agent_pipeline import AgentPipeline, InitQuery, SystemMessage, ToolsExecutionLoop
 from agentdojo.agent_pipeline.agent_pipeline import load_system_message
 from agentdojo.agent_pipeline.base_pipeline_element import BasePipelineElement
-from agentdojo.agent_pipeline.llms.anthropic_llm import (
-    _anthropic_to_assistant_message,
-    _conversation_to_anthropic,
-    _function_to_anthropic,
+from agentdojo.functions_runtime import EmptyEnv, Env, Function, FunctionCall, FunctionsRuntime
+from agentdojo.types import (
+    ChatAssistantMessage,
+    ChatMessage,
+    RedactedThinkingContentBlock,
+    TextContentBlock,
+    ThinkingContentBlock,
+    text_content_block_from_string,
 )
-from agentdojo.functions_runtime import EmptyEnv, Env, FunctionsRuntime
-from agentdojo.types import ChatAssistantMessage, ChatMessage, text_content_block_from_string
 
 from mandate_bench.enforcer import Level, MandateEnforcingToolsExecutor, Policy, Reviewer
 from mandate_bench.mandate import MandateGenerator, MandateResult, generate_mandate
@@ -97,6 +103,80 @@ class UsageMeter:
         }
 
 
+def _block_to_api(block) -> dict | None:
+    t = block["type"]
+    if t == "text":
+        return {"type": "text", "text": block["content"]} if block["content"] else None
+    if t == "thinking" and block.get("id") is not None:
+        return {"type": "thinking", "thinking": block["content"], "signature": block["id"]}
+    if t in ("thinking", "redacted_thinking"):
+        return {"type": "redacted_thinking", "data": block["content"]}
+    raise ValueError(f"unsupported content block {t}")
+
+
+def _message_to_api(message: ChatMessage) -> dict:
+    role = message["role"]
+    if role == "user":
+        return {"role": "user", "content": [b for b in map(_block_to_api, message["content"]) if b]}
+    if role == "tool":
+        if message["error"] is not None:
+            content = [{"type": "text", "text": message["error"]}]
+        else:
+            text = message["content"][0]["content"] if message["content"] else ""
+            content = [{"type": "text", "text": text}] if text else []
+        block = {"type": "tool_result", "tool_use_id": message["tool_call_id"], "content": content}
+        if message["error"] is not None:
+            block["is_error"] = True
+        return {"role": "user", "content": [block]}
+    if role == "assistant":
+        raw = message.get("_raw_content")
+        if raw is not None:
+            return {"role": "assistant", "content": raw}
+        content = [b for b in map(_block_to_api, message["content"] or []) if b]
+        content += [
+            {"type": "tool_use", "id": tc.id, "name": tc.function, "input": tc.args} for tc in message["tool_calls"] or []
+        ]
+        return {"role": "assistant", "content": content}
+    raise ValueError(f"invalid role {role}")
+
+
+def conversation_to_api(messages: Sequence[ChatMessage]) -> tuple[str | None, list[dict]]:
+    system = None
+    if messages and messages[0]["role"] == "system":
+        system = messages[0]["content"][0]["content"]
+        messages = messages[1:]
+    out: list[dict] = []
+    for m in map(_message_to_api, messages):
+        if out and out[-1]["role"] == "user" and m["role"] == "user":
+            out[-1]["content"] = [*out[-1]["content"], *m["content"]]
+        else:
+            out.append(m)
+    return system, out
+
+
+def function_to_api(tool: Function) -> dict:
+    return {"name": tool.name, "description": tool.description, "input_schema": tool.parameters.model_json_schema()}
+
+
+def response_to_assistant_message(resp) -> ChatAssistantMessage:
+    content = []
+    for b in resp.content:
+        if b.type == "text":
+            content.append(TextContentBlock(type="text", content=b.text))
+        elif b.type == "thinking":
+            content.append(ThinkingContentBlock(type="thinking", content=b.thinking, id=b.signature))
+        elif b.type == "redacted_thinking":
+            content.append(RedactedThinkingContentBlock(type="redacted_thinking", content=b.data))
+    tool_calls = [  # as agentdojo: tool calls only count when the model stopped to use tools
+        FunctionCall(id=b.id, function=b.name, args=dict(b.input))
+        for b in resp.content
+        if b.type == "tool_use" and resp.stop_reason == "tool_use"
+    ]
+    msg = ChatAssistantMessage(role="assistant", content=content, tool_calls=tool_calls or None)
+    msg["_raw_content"] = [b.to_dict() for b in resp.content]
+    return msg
+
+
 _RETRYABLE = (anthropic.RateLimitError, anthropic.APIConnectionError, anthropic.InternalServerError)
 
 
@@ -144,8 +224,8 @@ class ClaudeLLM(BasePipelineElement):
         messages: Sequence[ChatMessage] = [],
         extra_args: dict = {},
     ) -> tuple[str, FunctionsRuntime, Env, Sequence[ChatMessage], dict]:
-        system_prompt, anthropic_messages = _conversation_to_anthropic(messages)
-        tools = [_function_to_anthropic(tool) for tool in runtime.functions.values()]
+        system_prompt, anthropic_messages = conversation_to_api(messages)
+        tools = [function_to_api(tool) for tool in runtime.functions.values()]
         kwargs = dict(
             model=self.model,
             max_tokens=AGENT_MAX_TOKENS,
@@ -163,7 +243,7 @@ class ClaudeLLM(BasePipelineElement):
                 role="assistant", content=[text_content_block_from_string("[refusal]")], tool_calls=None
             )
         else:
-            output = _anthropic_to_assistant_message(completion)
+            output = response_to_assistant_message(completion)
         return query, runtime, env, [*messages, output], extra_args
 
 
