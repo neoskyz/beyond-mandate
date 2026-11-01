@@ -198,6 +198,11 @@ M1 allows it, and only the payee rule in M2 stops it.
 - **The benchmark is small.** It has 16 tasks with toy amounts.
 - **Run 2 has an expiry date.** `gpt-4o-mini-2024-07-18` retires on Jan 14, 2027.
 
+## Future work
+
+- **Adaptive attacker.** The attack templates never adapt. The next step is to write attacks that
+  specifically try to get past the first-time-payee rule.
+
 ## More detail
 
 [writeup/WRITEUP_combined.md](writeup/WRITEUP_combined.md) has the full write-up.
