@@ -1,5 +1,13 @@
 # Agentic commerce: mandate tightness vs. human attention
 
+## Summary
+
+This research explores the human cost of stopping agentic payment fraud. Tighter mandates stop more
+attacks, but send more payments to human review. It finds that a first-time-payee rule is the balance
+point: it stopped every attack tested, and stricter rules only added review work.
+
+## Background
+
 With Google's AP2 gaining adoption and Stripe supporting x402, agentic commerce is going mainstream.
 
 Yet its security is still primitive. Until August 2026, the official x402 client
